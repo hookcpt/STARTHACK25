@@ -60,10 +60,22 @@ export class SgmmExplorerComponent {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
+  setLevel(index: number) {
+    this.currentLevel.set(index);
+  }
+  
+
   // Methods that now delegate to SharedStateService
   zoomIn(): void {
     this.sharedState.zoomIn(this.levels);
   }
+
+  zoomOut() {
+    if (this.currentLevel() > 0) {
+      this.currentLevel.update(level => level - 1);
+    }
+  }
+  
 
   // Update selected dimension
   updateDimension(key: string, value: string) {
