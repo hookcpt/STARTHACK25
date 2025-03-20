@@ -1,38 +1,50 @@
-<div class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <app-explorer-header
-      [currentLevel]="currentLevel()"
+<div class="bg-gray-100 min-h-screen p-6 flex flex-col items-center">
+  <div class="max-w-6xl w-full">
+    
+    <!-- Show only sidebar at the start -->
+    <app-explorer-sidebar
+      *ngIf="step() < 4"
       [levels]="levels"
-      (zoomIn)="zoomIn()"
-      (zoomOut)="zoomOut()"
-    ></app-explorer-header>
+      [currentLevel]="currentLevel()"
+      [selectedDimensions]="selectedDimensions"
+      (levelChange)="setLevel($event)"
+      (dimensionChange)="updateDimension($event.key, $event.value)"
+      (nextStep)="nextStep()"
+      (completeSetup)="completeSetup()"
+    ></app-explorer-sidebar>
 
-    <div class="grid grid-cols-4 gap-6">
-      <!-- Sidebar -->
-      <app-explorer-sidebar
-        class="col-span-1"
-        [levels]="levels"
+    <!-- Show full explorer once setup is complete -->
+    <div *ngIf="step() === 4">
+      
+      <!-- Header -->
+      <app-explorer-header
         [currentLevel]="currentLevel()"
-        [selectedDimensions]="selectedDimensions"
-        (levelChange)="setLevel($event)"
-        (dimensionChange)="updateDimension($event.key, $event.value)"
-      ></app-explorer-sidebar>
+        [levels]="levels"
+        (zoomIn)="zoomIn()"
+        (zoomOut)="zoomOut()"
+      ></app-explorer-header>
 
-      <!-- Main Content -->
-      <div class="col-span-3">
-        <app-sgmm-level-views
-          [currentLevel]="currentLevel()"
-          [selectedDimensions]="selectedDimensions"
-          (zoomIn)="zoomIn()"
-        ></app-sgmm-level-views>
+      <!-- Centering Content Below Header -->
+      <div class="flex justify-center w-full mt-6">
+        <div class="grid grid-cols-3 max-w-4xl w-full gap-6">
+          
+          <!-- Main Content -->
+          <div class="col-span-3">
+            <app-sgmm-level-views
+              [currentLevel]="currentLevel()"
+              [selectedDimensions]="selectedDimensions"
+              (zoomIn)="zoomIn()"
+            ></app-sgmm-level-views>
 
-        <!-- Insights & Recommendations -->
-        <app-explorer-insights
-          [selectedDimensions]="selectedDimensions"
-          [currentLevel]="currentLevel()"
-        ></app-explorer-insights>
+            <!-- Insights & Recommendations -->
+            <app-explorer-insights
+              [selectedDimensions]="selectedDimensions"
+              [currentLevel]="currentLevel()"
+            ></app-explorer-insights>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </div>

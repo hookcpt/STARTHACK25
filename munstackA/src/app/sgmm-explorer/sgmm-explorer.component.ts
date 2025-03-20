@@ -1,10 +1,8 @@
-// File: STARTHACK25/munstackA/src/app/sgmm-explorer/sgmm-explorer.component.ts
-
 import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-// Import your child components (adjust paths as needed)
+// Import components
 import { ExplorerInsightsComponent } from '../explorer-insights/explorer-insights.component';
 import { SgmmLevel0OverviewComponent } from '../sgmm-level0-overview/sgmm-level0-overview.component';
 import { SgmmLevelViewsComponent } from '../sgmm-level-view/sgmm-level-view.component';
@@ -36,17 +34,19 @@ export interface Dimensions {
 })
 export class SgmmExplorerComponent {
 
-  // typed object
-  selectedDimensions:Dimensions = {
+  // Store dimensions
+  selectedDimensions: Dimensions = {
     persona: 'Executive',
     market: 'Global',
     maturity: 'Growth',
     size: 'Medium',
     technology: 'Digital Native',
   };
-  
 
-  // Using Angular Signals (requires Angular 16+)
+  // Track current view step
+  step = signal<number>(1); // Start at step 1 with only sidebar
+
+  // Track zoom level
   currentLevel = signal<number>(0);
   levels: any;
 
@@ -66,7 +66,7 @@ export class SgmmExplorerComponent {
     this.currentLevel.set(index);
   }
 
-  // 3) Generic method that only allows valid dimension keys
+  // Update selected dimension
   updateDimension(key: string, value: string) {
     // If selectedDimensions is typed as { [k: string]: string }
     // we can safely do bracket notation:
@@ -75,6 +75,16 @@ export class SgmmExplorerComponent {
     if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
       this.selectedDimensions[key as keyof Dimensions] = value;
     }
-    // else ignore or handle differently
-  }  
+  }
+
+  nextStep() {
+    if (this.step() < 3) {
+      this.step.set(this.step() + 1);  
+    }
+  }
+
+  // Final step reached -> Show full explorer
+  completeSetup() {
+    this.step.set(4);  
+  }
 }
