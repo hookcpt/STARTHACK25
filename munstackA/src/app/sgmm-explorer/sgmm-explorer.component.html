@@ -1,5 +1,10 @@
 <div class="bg-gray-100 min-h-screen p-6 flex flex-col items-center">
   <div class="max-w-6xl w-full">
+
+    <!-- DEBUG Display step -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+      <h2 class="font-bold text-lg">Step: {{ step }}</h2>
+    </div>
     
     <!-- Show only sidebar at the start (step < 4) -->
     <app-explorer-sidebar
@@ -39,6 +44,26 @@
               [selectedDimensions]="selectedDimensions"
               [currentLevel]="currentLevel"
             ></app-explorer-insights>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation (From dev branch) -->
+      <div class="bg-white p-4 rounded-lg shadow-md mt-6">
+        <h2 class="font-bold text-lg mb-3">Navigation</h2>
+        <div class="space-y-2">
+          <div
+            *ngFor="let level of levels; let i = index"
+            class="flex items-center p-2 rounded cursor-pointer"
+            [ngClass]="{
+              'bg-blue-100 text-blue-700': currentLevel === i, 
+              'hover:bg-gray-100': currentLevel !== i
+            }"
+            (click)="setLevel(i)"
+          >
+            <i *ngIf="currentLevel === i" class="lucide-chevron-down mr-2"></i>
+            <i *ngIf="currentLevel !== i" class="lucide-chevron-right mr-2"></i>
+            <span class="text-sm">{{ level }}</span>
           </div>
         </div>
       </div>
