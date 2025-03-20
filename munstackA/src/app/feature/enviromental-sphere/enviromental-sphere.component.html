@@ -1,5 +1,5 @@
 
-<div class="max-w-4xl mx-auto border border-yellow-400 rounded-lg overflow-hidden">
+<div *ngIf="!this.strategyData" class="max-w-4xl mx-auto border border-yellow-400 rounded-lg overflow-hidden">
   <!-- Top Section - Environmental Spheres -->
   <div class="bg-green-50 p-6 pb-8">
     <div class="flex justify-between items-center mb-6">
@@ -10,7 +10,7 @@
     <div class="grid grid-cols-2 gap-4">
       <!-- Economy Section -->
       <div class="bg-white rounded-lg shadow p-4">
-        <h2 class="font-bold text-center mb-1">Economy</h2>
+        <h2 class="font-bold text-center mb-1" (click)="callGenerateStrategy()">Economy</h2>
         <p class="text-sm text-center text-gray-600">Markets, competitors, economic trends</p>
       </div>
 
@@ -53,4 +53,17 @@
       </div>
     </div>
   </div>
+</div>
+
+<div  *ngIf="this.strategyData" class="results-container">
+  <app-economic
+    *ngIf="showResults"
+    [strategyData]="strategyData"
+    (backToForm)="showFormAgain()">
+  </app-economic>
+</div>
+
+<!-- Loading Overlay -->
+<div *ngIf="loading" class="loading-overlay">
+  <div class="loader">Loading...</div>
 </div>
