@@ -10,7 +10,8 @@ import {EconomyImpact} from "../model/economy-impact";
   providedIn: 'root'
 })
 export class EnviromentalSphereService {
-  private readonly apiUrl = "http://localhost:8000/enviroment_analisy-economy";
+  private PROXY_URL = 'https://sponge-bubble-jet.glitch.me/'
+  private readonly apiUrl = this.PROXY_URL+"https://modelapi.glodyfigueiredo.com/docs#/default/generate_strategy_enviroment_analisy_economy";
   private readonly strategyDataSubject = new BehaviorSubject<EconomyData | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);

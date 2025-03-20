@@ -1,10 +1,12 @@
 // File: sgmm-level-views.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 // Import your level components
 import { SgmmLevel0OverviewComponent } from './sgmm-level0-overview/sgmm-level0-overview.component';
 import { SgmmLevel1SpheresComponent } from './sgmm-level1-spheres-component/sgmm-level1-spheres-component.component';
+import { Subscription } from 'rxjs';
+import { Dimensions, SharedStateService } from '../shared-state.service';
 
 @Component({
   standalone: true,
@@ -46,9 +48,35 @@ import { SgmmLevel1SpheresComponent } from './sgmm-level1-spheres-component/sgmm
     // future level components if you break them out similarly
   ],
 })
-export class SgmmLevelViewsComponent {
-  @Input() currentLevel!: number;
-  @Input() selectedDimensions!: any; // or a typed interface
+export class SgmmLevelViewsComponent implements OnInit, OnDestroy {
+  // No @Input() needed
+  currentLevel = 0;
+  selectedDimensions!: Dimensions;
 
-  @Output() zoomIn = new EventEmitter<void>();
+  private subs: Subscription[] = [];
+
+  constructor(private sharedState: SharedStateService) {}
+
+  ngOnInit(): void {
+    // Subscribe to currentLevel from the service
+    const lvlSub = this.sharedState.currentLevel$.subscribe(level => {
+      this.currentLevel = level;
+    });
+    this.subs.push(lvlSub);
+
+    // Subscribe to dimensions from the service
+    const dimsSub = this.sharedState.dimensions$.subscribe(dims => {
+      this.selectedDimensions = dims;
+    });
+    this.subs.push(dimsSub);
+
+    // Initialize local copies right away (optional)
+    this.currentLevel = this.sharedState.getCurrentLevel();
+    this.selectedDimensions = this.sharedState.getDimensions();
+  }
+
+  ngOnDestroy(): void {
+    // Clean up subscriptions
+    this.subs.forEach(s => s.unsubscribe());
+  }
 }
