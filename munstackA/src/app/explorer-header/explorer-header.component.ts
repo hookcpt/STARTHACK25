@@ -20,23 +20,17 @@ import { IonicModule } from '@ionic/angular';
 
       <!-- Segment Bar -->
       <ion-toolbar class="ion-padding-horizontal" color="light">
-        <ion-segment 
-          [value]="selectedSegment"
-          (ionChange)="onSegmentChange($event)"
-        >
-          <ion-segment-button value="text">
-            <ion-label>Text</ion-label>
-          </ion-segment-button>
-
-          <!-- A subtle divider or label showing "1,000 ft" -->
-          <ion-segment-button value="one-thousand">
-            <ion-label>1.000 ft</ion-label>
-          </ion-segment-button>
-
-          <ion-segment-button value="visualisation">
-            <ion-label>Visualisation</ion-label>
-          </ion-segment-button>
-        </ion-segment>
+       <ion-segment [value]="selectedSegment" disabled="true">
+  <ion-segment-button value="text">
+    <ion-label>Text</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="five-thousand">
+    <ion-label>5.000 ft</ion-label>
+  </ion-segment-button>
+  <ion-segment-button value="visualisation">
+    <ion-label>Visualisation</ion-label>
+  </ion-segment-button>
+</ion-segment>
       </ion-toolbar>
     </ion-header>
   `,
@@ -45,7 +39,7 @@ export class ExplorerHeaderComponent {
   /**
    * Which segment is selected? Could be 'text', 'one-thousand', or 'visualisation'.
    */
-  @Input() selectedSegment: string = 'text';
+  @Input() selectedSegment: string = 'visualisation';
 
   /**
    * Output an event whenever the segment changes.
@@ -54,7 +48,7 @@ export class ExplorerHeaderComponent {
   @Output() segmentChanged = new EventEmitter<string>();
 
   onSegmentChange(event: any) {
-    this.segmentChanged.emit(event.detail.value);
+    //this.segmentChanged.emit(event.detail.value);
   }
   @Input() currentLevel!: number;
   @Input() levels!: string[];

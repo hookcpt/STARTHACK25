@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 
 // Import components
 import { ExplorerInsightsComponent } from '../explorer-insights/explorer-insights.component';
-import { SgmmLevel0OverviewComponent } from '../sgmm-level0-overview/sgmm-level0-overview.component';
+import { SgmmLevel0OverviewComponent } from '../sgmm-level-view/sgmm-level0-overview/sgmm-level0-overview.component';
 import { SgmmLevelViewsComponent } from '../sgmm-level-view/sgmm-level-view.component';
 import { ExplorerHeaderComponent } from '../explorer-header/explorer-header.component';
 import { ExplorerSidebarComponent } from '../explorer-sidebar/explorer-sidebar.component';
+import { SharedStateService } from '../shared-state.service';
+import { Subscription } from 'rxjs';
 
 export interface Dimensions {
   persona: string;
@@ -33,6 +35,7 @@ export interface Dimensions {
   ],
 })
 export class SgmmExplorerComponent {
+  constructor(private sharedState: SharedStateService) {}
 
   // Store dimensions
   selectedDimensions: Dimensions = {
@@ -49,21 +52,17 @@ export class SgmmExplorerComponent {
   // Track zoom level
   currentLevel = signal<number>(0);
   levels: any;
+  subs: Subscription[] = [];
 
-  zoomIn() {
-    if (this.currentLevel() < this.levels.length - 1) {
-      this.currentLevel.update(l => l + 1);
-    }
+
+  ngOnDestroy(): void {
+    // Clean up subscriptions
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  zoomOut() {
-    if (this.currentLevel() > 0) {
-      this.currentLevel.update(l => l - 1);
-    }
-  }
-
-  setLevel(index: number) {
-    this.currentLevel.set(index);
+  // Methods that now delegate to SharedStateService
+  zoomIn(): void {
+    this.sharedState.zoomIn(this.levels);
   }
 
   // Update selected dimension
