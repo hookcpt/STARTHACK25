@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
 import { SharedStateService } from "../shared-state.service";
+import { IonicModule } from "@ionic/angular"
 
 @Component({
   standalone: true,
@@ -53,7 +54,7 @@ import { SharedStateService } from "../shared-state.service";
       </div>
     </div>
   `,
-  imports: [CommonModule],
+  imports: [CommonModule, IonicModule],
 })
 export class ExplorerInsightsComponent {
   @Input() selectedDimensions!: any;

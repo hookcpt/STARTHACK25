@@ -1,317 +1,50 @@
-<div class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-6xl mx-auto">
-    <!-- Header -->
-    <app-explorer-header
-      [currentLevel]="currentLevel"
+<div class="bg-gray-100 min-h-screen p-6 flex flex-col items-center">
+  <div class="max-w-6xl w-full">
+    
+    <!-- Show only sidebar at the start -->
+    <app-explorer-sidebar
+      *ngIf="step() < 4"
       [levels]="levels"
-      (zoomIn)="zoomIn()"
-      (zoomOut)="zoomOut()"
-    ></app-explorer-header>
+      [currentLevel]="currentLevel()"
+      [selectedDimensions]="selectedDimensions"
+      (levelChange)="setLevel($event)"
+      (dimensionChange)="updateDimension($event.key, $event.value)"
+      (nextStep)="nextStep()"
+      (completeSetup)="completeSetup()"
+    ></app-explorer-sidebar>
 
-    <div class="grid grid-cols-4 gap-6">
-      <!-- Sidebar -->
-      <app-explorer-sidebar
-        class="col-span-1"
+    <!-- Show full explorer once setup is complete -->
+    <div *ngIf="step() === 4">
+      
+      <!-- Header -->
+      <app-explorer-header
+        [currentLevel]="currentLevel()"
         [levels]="levels"
-        [currentLevel]="currentLevel"
-        [selectedDimensions]="selectedDimensions"
-        (levelChange)="setLevel($event)"
-        (dimensionChange)="updateDimension($event.key, $event.value)"
-      ></app-explorer-sidebar>
+        (zoomIn)="zoomIn()"
+        (zoomOut)="zoomOut()"
+      ></app-explorer-header>
 
-      <!-- Main Content -->
+      <!-- Centering Content Below Header -->
+      <div class="flex justify-center w-full mt-6">
+        <div class="grid grid-cols-3 max-w-4xl w-full gap-6">
+          
+          <!-- Main Content -->
+          <div class="col-span-3">
+            <app-sgmm-level-views
+              [currentLevel]="currentLevel()"
+              [selectedDimensions]="selectedDimensions"
+              (zoomIn)="zoomIn()"
+            ></app-sgmm-level-views>
 
-      <div class="col-span-3">
-        <div class="bg-white p-6 rounded-lg shadow-md">
-          <!-- Level 0: SGMM Overview -->
-          <div *ngIf="currentLevel === 0" class="bg-blue-50 rounded-lg p-8 text-center relative">
-            <div class="absolute right-2 top-2 text-sm text-gray-500">10,000 ft View</div>
-            <h3 class="text-xl font-bold mb-4">The St. Gallen Management Model</h3>
-            <div class="flex justify-center">
-              <div class="relative w-96 h-96">
-                <!-- Simplified SGMM visual -->
-                <div class="absolute inset-0 border-4 border-blue-200 rounded-full"></div>
-                <div class="absolute inset-8 border-4 border-green-200 rounded-full flex items-center justify-center">
-                  <div class="absolute inset-8 border-4 border-orange-200 rounded-full flex items-center justify-center">
-                    <div class="w-24 h-24 bg-red-200 rounded-full flex items-center justify-center text-sm font-bold">
-                      Management
-                    </div>
-                    <div class="absolute text-sm font-bold text-green-700 -top-2">Environment</div>
-                    <div class="absolute text-sm font-bold text-orange-700 -bottom-2">Organization</div>
-                  </div>
-                </div>
-
-                <!-- Interactive hotspots -->
-                <div class="absolute left-40 top-8 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200" (click)="zoomIn()">
-                  Environmental Spheres
-                </div>
-                <div class="absolute right-40 top-24 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200" (click)="zoomIn()">
-                  Stakeholders
-                </div>
-                <div class="absolute left-36 bottom-24 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200" (click)="zoomIn()">
-                  Processes
-                </div>
-                <div class="absolute right-36 bottom-16 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200" (click)="zoomIn()">
-                  Development Modes
-                </div>
-              </div>
-            </div>
-            <div class="text-sm text-gray-600 mt-6">
-              Click on any element to explore deeper, or use the zoom controls
-            </div>
-          </div>
-
-          <!-- Level 1: Environmental Spheres -->
-          <div *ngIf="currentLevel === 1" class="bg-green-50 rounded-lg p-8 text-center relative">
-            <div class="absolute right-2 top-2 text-sm text-gray-500">5,000 ft View</div>
-            <h3 class="text-xl font-bold mb-4">Environmental Spheres</h3>
-            <div class="grid grid-cols-2 gap-6">
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Economy</h4>
-                <p class="text-sm">Markets, competitors, economic trends</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Technology</h4>
-                <p class="text-sm">Innovations, digital transformation</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Nature</h4>
-                <p class="text-sm">Environmental concerns, sustainability</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Society</h4>
-                <p class="text-sm">Social trends, cultural values, politics</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Level 2: Stakeholders -->
-          <div *ngIf="currentLevel === 2" class="bg-green-50 rounded-lg p-8 text-center relative">
-            <div class="absolute right-2 top-2 text-sm text-gray-500">2,500 ft View</div>
-            <h3 class="text-xl font-bold mb-4">Stakeholders</h3>
-            <div class="grid grid-cols-3 gap-4">
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Customers</h4>
-                <p class="text-xs">Specific to: {{ selectedDimensions.market }} markets</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Employees</h4>
-                <p class="text-xs">For: {{ selectedDimensions.size }} enterprises</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Investors</h4>
-                <p class="text-xs">Relevant for: {{ selectedDimensions.maturity }} stage</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Suppliers</h4>
-                <p class="text-xs">Integration: {{ selectedDimensions.technology }}</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Government</h4>
-                <p class="text-xs">Regulations in {{ selectedDimensions.market }} markets</p>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn()">
-                <h4 class="font-bold">Media & Public</h4>
-                <p class="text-xs">For: {{ selectedDimensions.size }} organizations</p>
-              </div>
-            </div>
-            <div class="mt-6 text-sm">
-              Note how content is tailored to your selected dimensions
-            </div>
-          </div>
-
-          <!-- Level 3: Interaction Issues -->
-          <div *ngIf="currentLevel === 3" class="bg-yellow-50 rounded-lg p-8 relative">
-            <div class="absolute right-2 top-2 text-sm text-gray-500">1,000 ft View</div>
-            <h3 class="text-xl font-bold mb-4 text-center">Interaction Issues</h3>
-            <div class="grid grid-cols-2 gap-4 mb-4">
-              <div class="bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold">Resources</h4>
-                <p class="text-sm">For {{ selectedDimensions.maturity }} companies:</p>
-                <ul class="text-xs text-left list-disc pl-4 mt-2">
-                  <li>Financial resources</li>
-                  <li>Human capital acquisition</li>
-                  <li>Technology integration</li>
-                </ul>
-              </div>
-              <div class="bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold">Norms and Values</h4>
-                <p class="text-sm">Relevant for {{ selectedDimensions.persona }}:</p>
-                <ul class="text-xs text-left list-disc pl-4 mt-2">
-                  <li>Leadership principles</li>
-                  <li>Corporate social responsibility</li>
-                  <li>Ethical frameworks</li>
-                </ul>
-              </div>
-            </div>
-            <div class="grid grid-cols-1 gap-4">
-              <div class="bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold">Concerns and Interests</h4>
-                <p class="text-sm">For {{ selectedDimensions.size }} enterprises in {{ selectedDimensions.market }} markets:</p>
-                <div class="grid grid-cols-3 gap-2 mt-2">
-                  <div class="bg-blue-50 p-2 rounded text-xs">Growth strategies</div>
-                  <div class="bg-blue-50 p-2 rounded text-xs">Regulatory compliance</div>
-                  <div class="bg-blue-50 p-2 rounded text-xs">Competitive positioning</div>
-                  <div class="bg-blue-50 p-2 rounded text-xs">Digital transformation</div>
-                  <div class="bg-blue-50 p-2 rounded text-xs">Stakeholder management</div>
-                  <div class="bg-blue-50 p-2 rounded text-xs">Risk mitigation</div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Level 4: Processes -->
-          <div *ngIf="currentLevel === 4" class="bg-orange-50 rounded-lg p-8 relative">
-            <div class="absolute right-2 top-2 text-sm text-gray-500">500 ft View</div>
-            <h3 class="text-xl font-bold mb-4 text-center">Organizational Processes</h3>
-
-            <div class="flex space-x-4 mb-6">
-              <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold text-blue-700">Management Processes</h4>
-                <div class="mt-2 text-sm">
-                  <p>For {{ selectedDimensions.persona }} in {{ selectedDimensions.maturity }} companies:</p>
-                  <div class="mt-2 space-y-2">
-                    <div class="bg-blue-50 p-2 rounded">Strategic planning cycles</div>
-                    <div class="bg-blue-50 p-2 rounded">Decision-making frameworks</div>
-                    <div class="bg-blue-50 p-2 rounded">Resource allocation</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold text-green-700">Business Processes</h4>
-                <div class="mt-2 text-sm">
-                  <p>For {{ selectedDimensions.size }} enterprises:</p>
-                  <div class="mt-2 space-y-2">
-                    <div class="bg-green-50 p-2 rounded">Value creation processes</div>
-                    <div class="bg-green-50 p-2 rounded">Service delivery models</div>
-                    <div class="bg-green-50 p-2 rounded">Innovation management</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold text-purple-700">Support Processes</h4>
-                <div class="mt-2 text-sm">
-                  <p>For {{ selectedDimensions.technology }} organizations:</p>
-                  <div class="mt-2 space-y-2">
-                    <div class="bg-purple-50 p-2 rounded">HR management systems</div>
-                    <div class="bg-purple-50 p-2 rounded">Financial controlling</div>
-                    <div class="bg-purple-50 p-2 rounded">IT infrastructure</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="text-center">
-              <button class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded-lg shadow" (click)="zoomIn()">
-                Explore Implementation Details
-              </button>
-            </div>
-          </div>
-
-          <!-- Level 5: Management Practice -->
-          <div *ngIf="currentLevel === 5" class="bg-red-50 rounded-lg p-8 relative">
-            <div class="absolute right-2 top-2 text-sm text-gray-500">Ground Level</div>
-            <h3 class="text-xl font-bold mb-4 text-center">Management Practice</h3>
-
-            <div class="grid grid-cols-2 gap-6">
-              <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold text-center mb-2">Tailored Insights for:</h4>
-                <div class="flex flex-wrap justify-center gap-2">
-                  <div class="bg-blue-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.persona }}</div>
-                  <div class="bg-green-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.market }} Market</div>
-                  <div class="bg-yellow-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.maturity }} Stage</div>
-                  <div class="bg-purple-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.size }} Enterprise</div>
-                  <div class="bg-red-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.technology }}</div>
-                </div>
-              </div>
-
-              <div class="bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold">Key Challenges</h4>
-                <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
-                  <li>Balancing stakeholder expectations in {{ selectedDimensions.market }} markets</li>
-                  <li>Managing {{ selectedDimensions.maturity }} phase transitions</li>
-                  <li>Implementing {{ selectedDimensions.technology }} solutions effectively</li>
-                  <li>Scaling leadership for {{ selectedDimensions.size }} organization needs</li>
-                </ul>
-              </div>
-
-              <div class="bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold">Recommended Approaches</h4>
-                <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
-                  <li>Stakeholder mapping and prioritization frameworks</li>
-                  <li>Strategic planning templates for {{ selectedDimensions.maturity }} companies</li>
-                  <li>Communication strategies for {{ selectedDimensions.size }} enterprises</li>
-                  <li>{{ selectedDimensions.technology }} implementation roadmaps</li>
-                </ul>
-              </div>
-
-              <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
-                <h4 class="font-bold mb-2">Practical Tools & Resources</h4>
-                <div class="grid grid-cols-3 gap-3">
-                  <div class="bg-gray-50 p-3 rounded-lg text-center">
-                    <div class="font-medium">Decision Framework</div>
-                    <div class="text-xs text-blue-600 mt-1">Download Template</div>
-                  </div>
-                  <div class="bg-gray-50 p-3 rounded-lg text-center">
-                    <div class="font-medium">Stakeholder Matrix</div>
-                    <div class="text-xs text-blue-600 mt-1">Interactive Tool</div>
-                  </div>
-                  <div class="bg-gray-50 p-3 rounded-lg text-center">
-                    <div class="font-medium">Process Analyzer</div>
-                    <div class="text-xs text-blue-600 mt-1">Launch Assessment</div>
-                  </div>
-                  <div class="bg-gray-50 p-3 rounded-lg text-center">
-                    <div class="font-medium">Strategy Canvas</div>
-                    <div class="text-xs text-blue-600 mt-1">Collaborative Tool</div>
-                  </div>
-                  <div class="bg-gray-50 p-3 rounded-lg text-center">
-                    <div class="font-medium">Case Studies</div>
-                    <div class="text-xs text-blue-600 mt-1">Browse Library</div>
-                  </div>
-                  <div class="bg-gray-50 p-3 rounded-lg text-center">
-                    <div class="font-medium">Expert Network</div>
-                    <div class="text-xs text-blue-600 mt-1">Connect</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-        <div class="mt-6 bg-white p-4 rounded-lg shadow-md">
-          <h2 class="font-bold text-lg mb-3">Insights & Recommendations</h2>
-          <p class="text-sm text-gray-600 mb-3">
-            Based on your selected dimensions and current view level, here are some tailored insights:
-          </p>
-
-          <div class="grid grid-cols-2 gap-4">
-            <div class="border rounded-lg p-3">
-              <h3 class="font-medium text-blue-700">Management Challenges</h3>
-              <p class="text-sm mt-1">
-                {{ selectedDimensions.maturity }} stage companies in {{ selectedDimensions.market }} markets typically
-                face coordination challenges across multiple stakeholder groups.
-              </p>
-            </div>
-
-            <div class="border rounded-lg p-3">
-              <h3 class="font-medium text-green-700">Opportunity Areas</h3>
-              <p class="text-sm mt-1">
-                {{ selectedDimensions.technology }} organizations can leverage process optimization
-                to enhance competitive advantage.
-              </p>
-            </div>
+            <!-- Insights & Recommendations -->
+            <app-explorer-insights
+              [selectedDimensions]="selectedDimensions"
+              [currentLevel]="currentLevel()"
+            ></app-explorer-insights>
           </div>
         </div>
       </div>
-    </div>
 
-
-        <!-- Insights & Recommendations -->
-        <app-explorer-insights
-          [selectedDimensions]="selectedDimensions"
-          [currentLevel]="currentLevel"
-        ></app-explorer-insights>
-      </div>
     </div>
   </div>
 </div>
