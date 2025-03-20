@@ -64,6 +64,7 @@ export class SgmmLevelViewsComponent implements OnInit, OnDestroy {
     // Subscribe to currentLevel
     const lvlSub = this.sharedState.currentLevel$.subscribe(level => {
       this.currentLevel = level;
+      console.log(this.currentLevel)
     });
     this.subs.push(lvlSub);
 

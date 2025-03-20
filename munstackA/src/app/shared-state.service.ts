@@ -95,6 +95,26 @@ export class SharedStateService {
   inputObject$ = this.inputObjectSubject.asObservable();
   outputObject$ = this.outputObjectSubject.asObservable();
 
+  // ------------------------------------------------------
+  // Input/Output data
+  // ------------------------------------------------------
+  setInputObject(data: InputData): void {
+    this.inputObjectSubject.next(data);
+  }
+  getInputObject(): InputData | null {
+    return this.inputObjectSubject.value;
+  }
+
+  setOutputObject(data: OutputData): void {
+    this.outputObjectSubject.next(data);
+  }
+  getOutputObject(): OutputData {
+    return this.outputObjectSubject.value;
+  }
+  
+
+/////////////
+
   // Manage current level (e.g., 0, 1, 2...)
   private currentLevelSubject = new BehaviorSubject<number>(0);
   currentLevel$ = this.currentLevelSubject.asObservable();
@@ -113,22 +133,6 @@ export class SharedStateService {
 
   levels!: string[];
 
-  // ------------------------------------------------------
-  // Input/Output data
-  // ------------------------------------------------------
-  setInputObject(data: InputData): void {
-    this.inputObjectSubject.next(data);
-  }
-  getInputObject(): InputData | null {
-    return this.inputObjectSubject.value;
-  }
-
-  setOutputObject(data: OutputData): void {
-    this.outputObjectSubject.next(data);
-  }
-  getOutputObject(): OutputData {
-    return this.outputObjectSubject.value;
-  }
 
   // ------------------------------------------------------
   // Dimensions
