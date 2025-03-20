@@ -51,9 +51,9 @@ export class SgmmExplorerComponent implements OnInit, OnDestroy {
     });
     this.subs.push(dimsSub);
 
-    // Subscribe to currentLevel changes
-    const levelSub = this.sharedState.currentLevel$.subscribe(l => {
-      this.currentLevel = l;
+    // Subscribe to currentLevel from SharedStateService
+    const levelSub = this.sharedState.currentLevel$.subscribe(level => {
+      this.currentLevel = level;
     });
     this.subs.push(levelSub);
 
@@ -67,12 +67,35 @@ export class SgmmExplorerComponent implements OnInit, OnDestroy {
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  // Wizard step logic
-  nextStep() {
-    if (this.step < 3) {
-      this.step++;
+  // Delegate level updates to SharedStateService
+  setLevel(index: number): void {
+    this.sharedState.setLevel(index);
+  }
+
+  zoomIn(): void {
+    this.sharedState.zoomIn(this.levels);
+  }
+
+  zoomOut() {
+    this.sharedState.zoomOut();
+  }
+
+  /*
+  // Update selected dimension
+  updateDimension(key: string, value: string) {
+    if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
+      this.selectedDimensions[key as keyof Dimensions] = value;
     }
   }
+    */
+
+  nextStep() {
+    if (this.step < 3) {
+      this.step += 1;
+    }
+  }
+
+  // Final step reached -> Show full explorer
   completeSetup() {
     // Once step=4, we show the main explorer UI
     this.step = 4;
@@ -83,16 +106,5 @@ export class SgmmExplorerComponent implements OnInit, OnDestroy {
     this.sharedState.updateDimension(key as keyof Dimensions, value);
   }
 
-  // Delegate level changes
-  setLevel(index: number) {
-    this.sharedState.setLevel(index);
-  }
-
-  zoomIn() {
-    this.sharedState.zoomIn(this.levels);
-  }
-
-  zoomOut() {
-    this.sharedState.zoomOut();
-  }
 }
+
