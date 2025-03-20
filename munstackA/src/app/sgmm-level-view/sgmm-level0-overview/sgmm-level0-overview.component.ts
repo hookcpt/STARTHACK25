@@ -75,6 +75,9 @@ export class SgmmLevel0OverviewComponent implements OnInit {
   constructor(private sharedState: SharedStateService) {}
 
   ngOnInit(): void {
+    // Grab the initial level immediately
+  this.currentLevel = this.sharedState.getCurrentLevel();
+  
     // Subscribe to currentLevel to reflect changes
     this.sharedState.currentLevel$.subscribe(level => {
       console.log('SgmmExplorerComponent sees new level:', level);
