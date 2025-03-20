@@ -1,0 +1,34 @@
+<!-- Level 2: Stakeholders -->
+<div class="bg-green-50 rounded-lg p-8 text-center relative">
+  <div class="absolute right-2 top-2 text-sm text-gray-500">2,500 ft View</div>
+  <h3 class="text-xl font-bold mb-4">Stakeholders</h3>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
+      <h4 class="font-bold">Customers</h4>
+      <p class="text-xs">Specific to: {{ selectedDimensions.market }} markets</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
+      <h4 class="font-bold">Employees</h4>
+      <p class="text-xs">For: {{ selectedDimensions.size }} enterprises</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
+      <h4 class="font-bold">Investors</h4>
+      <p class="text-xs">Relevant for: {{ selectedDimensions.maturity }} stage</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
+      <h4 class="font-bold">Suppliers</h4>
+      <p class="text-xs">Integration: {{ selectedDimensions.technology }}</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
+      <h4 class="font-bold">Government</h4>
+      <p class="text-xs">Regulations in {{ selectedDimensions.market }} markets</p>
+    </div>
+    <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
+      <h4 class="font-bold">Media & Public</h4>
+      <p class="text-xs">For: {{ selectedDimensions.size }} organizations</p>
+    </div>
+  </div>
+  <div class="mt-6 text-sm">
+    Note how content is tailored to your selected dimensions
+  </div>
+</div>
