@@ -49,40 +49,46 @@ export class SgmmExplorerComponent {
   // Track current view step
   step = signal<number>(1); // Start at step 1 with only sidebar
 
-  // Track zoom level
-  currentLevel = signal<number>(0);
-  levels: any;
+  // Track zoom level using SharedStateService
+  currentLevel!: number;
+  levels = [
+    '10,000 ft - SGMM Overview',
+    '5,000 ft - Environmental Spheres',
+    '2,500 ft - Stakeholders',
+    '1,000 ft - Interaction Issues',
+    '500 ft - Processes',
+    'Ground Level - Management Practice',
+  ];
   subs: Subscription[] = [];
 
+  ngOnInit(): void {
+    // Subscribe to currentLevel from SharedStateService
+    const levelSub = this.sharedState.currentLevel$.subscribe(level => {
+      this.currentLevel = level;
+    });
+    this.subs.push(levelSub);
+  }
 
   ngOnDestroy(): void {
     // Clean up subscriptions
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  setLevel(index: number) {
-    this.currentLevel.set(index);
+  // Delegate level updates to SharedStateService
+  setLevel(index: number): void {
+    this.sharedState.setLevel(index);
   }
-  
 
-  // Methods that now delegate to SharedStateService
   zoomIn(): void {
     this.sharedState.zoomIn(this.levels);
   }
 
   zoomOut() {
-    if (this.currentLevel() > 0) {
-      this.currentLevel.update(level => level - 1);
-    }
+    this.sharedState.zoomOut();
   }
-  
 
   // Update selected dimension
   updateDimension(key: string, value: string) {
-    // If selectedDimensions is typed as { [k: string]: string }
-    // we can safely do bracket notation:
-    
-    // 1) Check if 'key' is an existing property in selectedDimensions
     if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
       this.selectedDimensions[key as keyof Dimensions] = value;
     }
@@ -90,12 +96,12 @@ export class SgmmExplorerComponent {
 
   nextStep() {
     if (this.step() < 3) {
-      this.step.set(this.step() + 1);  
+      this.step.set(this.step() + 1);
     }
   }
 
   // Final step reached -> Show full explorer
   completeSetup() {
-    this.step.set(4);  
+    this.step.set(4);
   }
 }
