@@ -1,8 +1,8 @@
-import { SharedStateService } from './shared-state.service';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
+import { SharedStateService } from './shared-state.service';
 
 /**
  * 
