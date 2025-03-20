@@ -4,46 +4,51 @@ import { SharedStateService } from "../shared-state.service";
 
 @Component({
   standalone: true,
-  selector: 'app-explorer-insights',
+  selector: "app-explorer-insights",
   template: `
-    <div class="mt-6 bg-white p-4 rounded-lg shadow-md">
-      <h2 class="font-bold text-lg mb-3">Insights & Recommendations</h2>
-      <p class="text-sm text-gray-600 mb-3">
+    <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+      <h2 class="font-bold text-lg mb-4">Insights & Recommendations</h2>
+      <p class="text-sm text-gray-600 mb-5">
         Based on your selected dimensions and current view level, here are some tailored insights:
       </p>
-      
-      <div class="grid grid-cols-2 gap-4">
-        <div class="border rounded-lg p-3">
-          <h3 class="font-medium text-blue-700">Management Challenges</h3>
-          <p class="text-sm mt-1">
-            {{ selectedDimensions.maturity }} stage companies in {{ selectedDimensions.market }} markets
-            typically face coordination challenges across multiple stakeholder groups.
-          </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        
+        <!-- Management Challenges -->
+        <div class="border rounded-lg p-4 bg-blue-50 shadow-sm">
+          <h3 class="font-semibold text-blue-700 text-lg mb-3">Management Challenges</h3>
           <ul class="space-y-3">
-            <li *ngFor="let challenge of managementChallenges" class="p-3 bg-white rounded-md shadow">
-              <h4 class="font-medium text-blue-600">{{ challenge.name }}</h4>
-              <p class="text-sm text-gray-700">{{ challenge.description }}</p>
-              <p class="text-xs text-gray-500 italic">Strategy: {{ challenge.strategy }}</p>
+            <li *ngFor="let challenge of managementChallenges; let i = index" 
+                class="p-3 bg-white rounded-md shadow hover:shadow-lg transition cursor-pointer">
+              <div class="flex justify-between items-center" (click)="toggleChallenge(i)">
+                <h4 class="font-medium text-blue-600">{{ challenge.name }}</h4>
+                <span class="text-blue-600 font-bold text-lg">{{ expandedChallenges[i] ? '−' : '+' }}</span>
+              </div>
+              <div *ngIf="expandedChallenges[i]" class="mt-2 p-3 bg-gray-100 rounded-md">
+                <p class="text-sm text-gray-800">{{ challenge.description }}</p>
+                <p class="text-xs text-gray-500 italic mt-2">Strategy: {{ challenge.strategy }}</p>
+              </div>
             </li>
           </ul>
         </div>
 
-
-        <div class="border rounded-lg p-3">
-          <h3 class="font-medium text-green-700">Opportunity Areas</h3>
-          <p class="text-sm mt-1">
-            {{ selectedDimensions.technology }} organizations can leverage process optimization
-            to enhance competitive advantage.
-          </p>
+        <!-- Opportunity Areas -->
+        <div class="border rounded-lg p-4 bg-green-50 shadow-sm">
+          <h3 class="font-semibold text-green-700 text-lg mb-3">Opportunity Areas</h3>
           <ul class="space-y-3">
-            <li *ngFor="let opportunity of opportunityAreas" class="p-3 bg-white rounded-md shadow">
-              <h4 class="font-medium text-green-600">{{ opportunity.name }}</h4>
-              <p class="text-sm text-gray-700">{{ opportunity.description }}</p>
-              <p class="text-xs text-gray-500 italic">Action: {{ opportunity.action }}</p>
+            <li *ngFor="let opportunity of opportunityAreas; let i = index" 
+                class="p-3 bg-white rounded-md shadow hover:shadow-lg transition cursor-pointer">
+              <div class="flex justify-between items-center" (click)="toggleOpportunity(i)">
+                <h4 class="font-medium text-green-600">{{ opportunity.name }}</h4>
+                <span class="text-green-600 font-bold text-lg">{{ expandedOpportunities[i] ? '−' : '+' }}</span>
+              </div>
+              <div *ngIf="expandedOpportunities[i]" class="mt-2 p-3 bg-gray-100 rounded-md">
+                <p class="text-sm text-gray-800">{{ opportunity.description }}</p>
+                <p class="text-xs text-gray-500 italic mt-2">Action: {{ opportunity.action }}</p>
+              </div>
             </li>
           </ul>
         </div>
-
 
       </div>
     </div>
@@ -56,16 +61,27 @@ export class ExplorerInsightsComponent {
 
   managementChallenges: any[] = [];
   opportunityAreas: any[] = [];
+  expandedChallenges: boolean[] = [];
+  expandedOpportunities: boolean[] = [];
 
   constructor(private sharedStateService: SharedStateService) {}
 
   ngOnInit(): void {
-    // Subscribe to data changes from SharedStateService
     this.sharedStateService.outputObject$.subscribe(outputData => {
       if (outputData) {
         this.managementChallenges = outputData.managementChallenges;
         this.opportunityAreas = outputData.opportunityAreas;
+        this.expandedChallenges = new Array(outputData.managementChallenges.length).fill(false);
+        this.expandedOpportunities = new Array(outputData.opportunityAreas.length).fill(false);
       }
     });
+  }
+
+  toggleChallenge(index: number): void {
+    this.expandedChallenges[index] = !this.expandedChallenges[index];
+  }
+
+  toggleOpportunity(index: number): void {
+    this.expandedOpportunities[index] = !this.expandedOpportunities[index];
   }
 }
