@@ -159,8 +159,10 @@ export class SharedStateService {
   }
 
   setLevel(newLevel: number) {
+    console.log('SharedStateService: setLevel called with', newLevel);
     this.currentLevelSubject.next(newLevel);
   }
+  
 
   // -----------------------------------------------------
   // Dimensions

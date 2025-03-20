@@ -8,7 +8,7 @@ import {EnviromentalSphereComponent} from "../feature/enviromental-sphere/enviro
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
-  imports: [IonHeader, IonToolbar, IonTitle, IonContent, SgmmExplorerComponent, EnviromentalSphereComponent],
+  imports: [IonHeader, IonToolbar, IonTitle, IonContent, SgmmExplorerComponent],
 })
 export class Tab1Page {
   constructor() {}
