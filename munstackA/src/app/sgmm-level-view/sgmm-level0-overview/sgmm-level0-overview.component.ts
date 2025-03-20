@@ -7,7 +7,6 @@ import { SharedStateService } from 'src/app/shared-state.service';
   standalone: true,
   selector: 'app-sgmm-level0-overview',
   template: `
-<!-- sgmm-level0-overview.component.html -->
 <div class="bg-blue-50 rounded-lg p-8 text-center relative">
   <div class="absolute right-2 top-2 text-sm text-gray-500">10,000 ft View</div>
   <h3 class="text-xl font-bold mb-4">The St. Gallen Management Model</h3>
@@ -25,7 +24,7 @@ import { SharedStateService } from 'src/app/shared-state.service';
         </div>
       </div>
 
-      <!-- Interactive hotspots -->
+      <!-- Interactive hotspots (divs) -->
       <div
         class="absolute left-40 top-8 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
         (click)="goToLevel(1)"
@@ -50,14 +49,22 @@ import { SharedStateService } from 'src/app/shared-state.service';
       >
         Development Modes
       </div>
-    </div> <!-- Close .relative w-96 h-96 -->
-  </div> <!-- Close .flex justify-center -->
+
+      <!-- NO-TEXT BUTTON (square) for testing (click) -->
+      <button
+        class="absolute left-2 bottom-2 w-8 h-8 bg-green-100 rounded shadow hover:bg-green-200"
+        (click)="goToLevel(1)"
+      >
+        <!-- No text inside -->
+      </button>
+
+    </div> <!-- .relative w-96 h-96 -->
+  </div> <!-- .flex justify-center -->
 
   <div class="text-sm text-gray-600 mt-6">
     Click on any element to explore deeper, or use the zoom controls
   </div>
-</div> <!-- Close .bg-blue-50 rounded-lg p-8 text-center relative -->
-
+</div> <!-- .bg-blue-50 rounded-lg p-8 text-center relative -->
 
   `,
   imports: [CommonModule],
@@ -77,7 +84,7 @@ export class SgmmLevel0OverviewComponent implements OnInit {
   ngOnInit(): void {
     // Grab the initial level immediately
   this.currentLevel = this.sharedState.getCurrentLevel();
-  
+
     // Subscribe to currentLevel to reflect changes
     this.sharedState.currentLevel$.subscribe(level => {
       console.log('SgmmExplorerComponent sees new level:', level);
