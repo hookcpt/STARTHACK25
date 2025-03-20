@@ -1,5 +1,5 @@
 // sgmm-level0-overview.component.ts
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SharedStateService } from 'src/app/shared-state.service';
 
@@ -56,11 +56,17 @@ import { SharedStateService } from 'src/app/shared-state.service';
   `,
   imports: [CommonModule],
 })
-export class SgmmLevel0OverviewComponent {
+export class SgmmLevel0OverviewComponent implements OnInit {
+  currentLevel = 0; // local property if you need to display or use it
+
   constructor(private sharedState: SharedStateService) {}
 
-  goToLevel(level: number) {
-    // Directly set the new level in the shared service
-    this.sharedState.setLevel(level);
+  ngOnInit(): void {
+    // Observe the shared "currentLevel" in real time
+    this.sharedState.currentLevel$.subscribe(level => {
+      this.currentLevel = level;
+      console.log('Level changed to:', level);
+      // or do any other logic you need here
+    });
   }
 }
