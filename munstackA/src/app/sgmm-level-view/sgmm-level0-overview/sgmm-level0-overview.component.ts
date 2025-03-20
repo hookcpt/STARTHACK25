@@ -1,6 +1,7 @@
 // sgmm-level0-overview.component.ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedStateService } from 'src/app/shared-state.service';
 
 @Component({
   standalone: true,
@@ -27,25 +28,21 @@ import { CommonModule } from '@angular/common';
           <!-- Interactive hotspots -->
           <div 
             class="absolute left-40 top-8 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
-            (click)="zoomIn.emit()"
           >
             Environmental Spheres
           </div>
           <div 
             class="absolute right-40 top-24 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
-            (click)="zoomIn.emit()"
           >
             Stakeholders
           </div>
           <div 
             class="absolute left-36 bottom-24 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200"
-            (click)="zoomIn.emit()"
           >
             Processes
           </div>
           <div 
             class="absolute right-36 bottom-16 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200"
-            (click)="zoomIn.emit()"
           >
             Development Modes
           </div>
@@ -60,5 +57,10 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
 })
 export class SgmmLevel0OverviewComponent {
-  @Output() zoomIn = new EventEmitter<void>();
+  constructor(private sharedState: SharedStateService) {}
+
+  goToLevel(level: number) {
+    // Directly set the new level in the shared service
+    this.sharedState.setLevel(level);
+  }
 }

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Dimensions } from './sgmm-explorer/sgmm-explorer.component';
 
 interface InputData {
   persona: string;
@@ -37,6 +38,12 @@ interface OutputData {
   providedIn: 'root',
 })
 export class SharedStateService {
+  zoomIn(levels: any) {
+    throw new Error('Method not implemented.');
+  }
+  zoomOut() {
+    throw new Error('Method not implemented.');
+  }
   // BehaviorSubjects hold the latest value and emit updates
   private inputObjectSubject = new BehaviorSubject<InputData | null>(null);
   private outputObjectSubject = new BehaviorSubject<OutputData | null>(null);
@@ -44,6 +51,52 @@ export class SharedStateService {
   // Expose asObservable() so consumers cannot modify the subject directly
   inputObject$ = this.inputObjectSubject.asObservable();
   outputObject$ = this.outputObjectSubject.asObservable();
+  private currentLevelSubject = new BehaviorSubject<number>(0);
+  currentLevel$ = this.currentLevelSubject.asObservable();
+
+  setLevel(newLevel: number) {
+    this.currentLevelSubject.next(newLevel);
+  }
+
+  getLevel(): number {
+    return this.currentLevelSubject.value;
+  }
+
+  // 1) Dimensions
+  private dimensionsSubject = new BehaviorSubject<Dimensions>({
+    persona: 'Executive',
+    market: 'Global',
+    maturity: 'Growth',
+    size: 'Medium',
+    technology: 'Digital Native',
+  });
+
+  dimensions$ = this.dimensionsSubject.asObservable();
+
+  // 2) Current Level
+  // Getter for synchronous access
+  getDimensions(): Dimensions {
+    return this.dimensionsSubject.value;
+  }
+
+  getCurrentLevel(): number {
+    return this.currentLevelSubject.value;
+  }
+
+  // Update dimension by key
+  updateDimension(key: keyof Dimensions, value: string) {
+    const dims = { ...this.dimensionsSubject.value };
+    dims[key] = value;
+    this.dimensionsSubject.next(dims);
+  }
+
+  // Update entire Dimensions object at once (optional)
+  setDimensions(newDims: Dimensions) {
+    this.dimensionsSubject.next(newDims);
+  }
+
+
+  
 
   setInputObject(data: InputData): void {
     this.inputObjectSubject.next(data);

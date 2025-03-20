@@ -6,10 +6,12 @@ import { FormsModule } from '@angular/forms';
 
 // Import your child components (adjust paths as needed)
 import { ExplorerInsightsComponent } from '../explorer-insights/explorer-insights.component';
-import { SgmmLevel0OverviewComponent } from '../sgmm-level0-overview/sgmm-level0-overview.component';
+import { SgmmLevel0OverviewComponent } from '../sgmm-level-view/sgmm-level0-overview/sgmm-level0-overview.component';
 import { SgmmLevelViewsComponent } from '../sgmm-level-view/sgmm-level-view.component';
 import { ExplorerHeaderComponent } from '../explorer-header/explorer-header.component';
 import { ExplorerSidebarComponent } from '../explorer-sidebar/explorer-sidebar.component';
+import { SharedStateService } from '../shared-state.service';
+import { Subscription } from 'rxjs';
 
 export interface Dimensions {
   persona: string;
@@ -36,45 +38,63 @@ export interface Dimensions {
 })
 export class SgmmExplorerComponent {
 
-  // typed object
-  selectedDimensions:Dimensions = {
-    persona: 'Executive',
-    market: 'Global',
-    maturity: 'Growth',
-    size: 'Medium',
-    technology: 'Digital Native',
-  };
-  
+  // Subscriptions to BehaviorSubjects
+  private subs: Subscription[] = [];
+  selectedDimensions!: Dimensions;
+  currentLevel!: number;
 
-  // Using Angular Signals (requires Angular 16+)
-  currentLevel = signal<number>(0);
-  levels: any;
+  // Example levels array
+  levels = [
+    '10,000 ft - SGMM Overview',
+    '5,000 ft - Environmental Spheres',
+    '2,500 ft - Stakeholders',
+    '1,000 ft - Interaction Issues',
+    '500 ft - Processes',
+    'Ground Level - Management Practice',
+  ];
 
-  zoomIn() {
-    if (this.currentLevel() < this.levels.length - 1) {
-      this.currentLevel.update(l => l + 1);
-    }
+
+  constructor(private sharedState: SharedStateService) {}
+
+  ngOnInit(): void {
+    // Subscribe to dimension changes
+    const dimSub = this.sharedState.dimensions$.subscribe(dims => {
+      this.selectedDimensions = dims;
+    });
+    this.subs.push(dimSub);
+
+    // Subscribe to currentLevel changes
+    const levelSub = this.sharedState.currentLevel$.subscribe(level => {
+      this.currentLevel = level;
+    });
+    this.subs.push(levelSub);
+
+    // Initialize local copies
+    this.selectedDimensions = this.sharedState.getDimensions();
+    this.currentLevel = this.sharedState.getCurrentLevel();
   }
 
-  zoomOut() {
-    if (this.currentLevel() > 0) {
-      this.currentLevel.update(l => l - 1);
-    }
+  ngOnDestroy(): void {
+    // Clean up subscriptions
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  setLevel(index: number) {
-    this.currentLevel.set(index);
+  // Methods that now delegate to SharedStateService
+  zoomIn(): void {
+    this.sharedState.zoomIn(this.levels);
   }
 
-  // 3) Generic method that only allows valid dimension keys
-  updateDimension(key: string, value: string) {
-    // If selectedDimensions is typed as { [k: string]: string }
-    // we can safely do bracket notation:
-    
-    // 1) Check if 'key' is an existing property in selectedDimensions
-    if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
-      this.selectedDimensions[key as keyof Dimensions] = value;
-    }
-    // else ignore or handle differently
-  }  
+  zoomOut(): void {
+    this.sharedState.zoomOut();
+  }
+
+  setLevel(index: number): void {
+    this.sharedState.setLevel(index);
+  }
+
+  // This updates a single dimension property
+  updateDimension(key: string, value: string): void {
+    this.sharedState.updateDimension(key as keyof Dimensions, value);
+  }
+
 }
