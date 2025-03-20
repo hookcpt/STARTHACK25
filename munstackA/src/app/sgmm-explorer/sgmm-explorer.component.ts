@@ -37,13 +37,14 @@ export interface Dimensions {
 export class SgmmExplorerComponent {
 
   // typed object
-  selectedDimensions: Dimensions = {
+  selectedDimensions:{ [k: string]: string } = {
     persona: 'Executive',
     market: 'Global',
     maturity: 'Growth',
     size: 'Medium',
-    technology: 'Digital Native'
+    technology: 'Digital Native',
   };
+  
 
   // Using Angular Signals (requires Angular 16+)
   currentLevel = signal<number>(0);
@@ -66,7 +67,14 @@ export class SgmmExplorerComponent {
   }
 
   // 3) Generic method that only allows valid dimension keys
-  updateDimension<K extends keyof Dimensions>(key: K, value: Dimensions[K]) {
-    this.selectedDimensions[key] = value;
-  }
+  updateDimension(key: string, value: string) {
+    // If selectedDimensions is typed as { [k: string]: string }
+    // we can safely do bracket notation:
+    
+    // 1) Check if 'key' is an existing property in selectedDimensions
+    if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
+      this.selectedDimensions[key] = value;
+    }
+    // else ignore or handle differently
+  }  
 }

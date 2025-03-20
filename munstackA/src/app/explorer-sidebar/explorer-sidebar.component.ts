@@ -17,7 +17,7 @@ import { Dimensions } from '../sgmm-explorer/sgmm-explorer.component';
             <label class="block text-sm font-medium text-gray-700 mb-1">Persona</label>
             <select
               class="w-full border rounded p-2 text-sm"
-              [ngModel]="selectedDimensions.persona"
+              [ngModel]="selectedDimensions['persona']"
               (ngModelChange)="emitDimensionChange('persona', $event)"
             >
               <option>Executive</option>
@@ -33,7 +33,7 @@ import { Dimensions } from '../sgmm-explorer/sgmm-explorer.component';
             <label class="block text-sm font-medium text-gray-700 mb-1">Market</label>
             <select
               class="w-full border rounded p-2 text-sm"
-              [ngModel]="selectedDimensions.market"
+              [ngModel]="selectedDimensions['market']"
               (ngModelChange)="emitDimensionChange('market', $event)"
             >
               <option>Global</option>
@@ -48,7 +48,7 @@ import { Dimensions } from '../sgmm-explorer/sgmm-explorer.component';
             <label class="block text-sm font-medium text-gray-700 mb-1">Maturity Level</label>
             <select
               class="w-full border rounded p-2 text-sm"
-              [ngModel]="selectedDimensions.maturity"
+              [ngModel]="selectedDimensions['maturity']"
               (ngModelChange)="emitDimensionChange('maturity', $event)"
             >
               <option>Startup</option>
@@ -78,7 +78,7 @@ import { Dimensions } from '../sgmm-explorer/sgmm-explorer.component';
             <label class="block text-sm font-medium text-gray-700 mb-1">Technology Adoption</label>
             <select
               class="w-full border rounded p-2 text-sm"
-              [ngModel]="selectedDimensions.technology"
+              [ngModel]="selectedDimensions['technology']"
               (ngModelChange)="emitDimensionChange('technology', $event)"
             >
               <option>Traditional</option>
@@ -118,12 +118,12 @@ export class ExplorerSidebarComponent {
   @Input() currentLevel!: number;
 
   // Use the interface instead of [key: string]: string
-  @Input() selectedDimensions!: Dimensions;
+  @Input() selectedDimensions!: {[key: string]: string};
 
   @Output() levelChange = new EventEmitter<number>();
   @Output() dimensionChange = new EventEmitter<{ key: string; value: string }>();
 
-  emitDimensionChange(key: keyof Dimensions, value: string) {
+  emitDimensionChange(key: string, value: any) {
     this.dimensionChange.emit({ key, value });
   }
 }
