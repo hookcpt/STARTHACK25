@@ -1,0 +1,46 @@
+// For the Lucide icons - you would need to install the appropriate Angular package
+// You can use @ngneat/svg-icon or another Angular icon library
+// Here's a placeholder for the icon styles
+
+.lucide-map,
+.lucide-layers,
+.lucide-zoom-in,
+.lucide-zoom-out,
+.lucide-filter,
+.lucide-settings,
+.lucide-info,
+.lucide-chevron-down,
+.lucide-chevron-right {
+  width: 1rem;
+  height: 1rem;
+  display: inline-block;
+  vertical-align: middle;
+  
+  &.text-blue-600 {
+    color: #2563eb;
+  }
+  
+  &.text-gray-600 {
+    color: #4b5563;
+  }
+}
+
+// Responsive layout adjustments
+@media (max-width: 768px) {
+  .grid-cols-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .col-span-3,
+  .col-span-1 {
+    grid-column: span 1;
+  }
+  
+  .flex.space-x-4 {
+    flex-direction: column;
+    
+    > div {
+      margin-bottom: 1rem;
+    }
+  }
+}

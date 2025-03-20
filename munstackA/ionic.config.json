@@ -1,0 +1,7 @@
+{
+  "name": "munstackA",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
