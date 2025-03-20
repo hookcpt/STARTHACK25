@@ -24,47 +24,73 @@ import { SharedStateService } from 'src/app/shared-state.service';
         </div>
       </div>
 
-      <!-- Interactive hotspots (divs) -->
+      <!-- Hotspot 1 -->
       <div
         class="absolute left-40 top-8 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
         (click)="goToLevel(1)"
       >
         Environmental Spheres
       </div>
+      <!-- Button 1 next to Hotspot 1 -->
+      <button
+        class="absolute left-52 top-8 w-8 h-8 bg-green-200 rounded shadow hover:bg-green-300 flex items-center justify-center"
+        (click)="goToLevel(1)"
+      >
+        [ ]
+      </button>
+
+      <!-- Hotspot 2 -->
       <div
         class="absolute right-40 top-24 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
         (click)="goToLevel(2)"
       >
         Stakeholders
       </div>
+      <!-- Button 2 next to Hotspot 2 -->
+      <button
+        class="absolute right-52 top-24 w-8 h-8 bg-green-200 rounded shadow hover:bg-green-300 flex items-center justify-center"
+        (click)="goToLevel(2)"
+      >
+        [ ]
+      </button>
+
+      <!-- Hotspot 3 -->
       <div
         class="absolute left-36 bottom-24 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200"
         (click)="goToLevel(3)"
       >
         Processes
       </div>
+      <!-- Button 3 next to Hotspot 3 -->
+      <button
+        class="absolute left-48 bottom-24 w-8 h-8 bg-orange-200 rounded shadow hover:bg-orange-300 flex items-center justify-center"
+        (click)="goToLevel(3)"
+      >
+        [ ]
+      </button>
+
+      <!-- Hotspot 4 -->
       <div
         class="absolute right-36 bottom-16 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200"
         (click)="goToLevel(4)"
       >
         Development Modes
       </div>
-
-      <!-- NO-TEXT BUTTON (square) for testing (click) -->
+      <!-- Button 4 next to Hotspot 4 -->
       <button
-        class="absolute left-2 bottom-2 w-8 h-8 bg-green-100 rounded shadow hover:bg-green-200"
-        (click)="goToLevel(1)"
+        class="absolute right-48 bottom-16 w-8 h-8 bg-orange-200 rounded shadow hover:bg-orange-300 flex items-center justify-center"
+        (click)="goToLevel(4)"
       >
-        <!-- No text inside -->
+        [ ]
       </button>
 
-    </div> <!-- .relative w-96 h-96 -->
-  </div> <!-- .flex justify-center -->
+    </div> <!-- End .relative w-96 h-96 -->
+  </div> <!-- End .flex justify-center -->
 
   <div class="text-sm text-gray-600 mt-6">
     Click on any element to explore deeper, or use the zoom controls
   </div>
-</div> <!-- .bg-blue-50 rounded-lg p-8 text-center relative -->
+</div> <!-- End .bg-blue-50 rounded-lg p-8 text-center relative -->
 
   `,
   imports: [CommonModule],
