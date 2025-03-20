@@ -63,8 +63,8 @@ import { Dimensions } from '../sgmm-explorer/sgmm-explorer.component';
             <label class="block text-sm font-medium text-gray-700 mb-1">Enterprise Size</label>
             <select
   class="w-full border rounded p-2 text-sm"
-  [ngModel]="selectedDimensions['persona']"
-  (ngModelChange)="emitDimensionChange('persona', $event)"
+  [ngModel]="selectedDimensions['size']"
+  (ngModelChange)="emitDimensionChange('size', $event)"
 >
               <option>Small</option>
               <option>Medium</option>
@@ -118,7 +118,7 @@ export class ExplorerSidebarComponent {
   @Input() currentLevel!: number;
 
   // Use the interface instead of [key: string]: string
-  @Input() selectedDimensions!: {[key: string]: string};
+  @Input() selectedDimensions!: Dimensions;
 
   @Output() levelChange = new EventEmitter<number>();
   @Output() dimensionChange = new EventEmitter<{ key: string; value: string }>();

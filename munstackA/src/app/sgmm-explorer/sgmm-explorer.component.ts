@@ -37,7 +37,7 @@ export interface Dimensions {
 export class SgmmExplorerComponent {
 
   // typed object
-  selectedDimensions:{ [k: string]: string } = {
+  selectedDimensions:Dimensions = {
     persona: 'Executive',
     market: 'Global',
     maturity: 'Growth',
@@ -73,7 +73,7 @@ export class SgmmExplorerComponent {
     
     // 1) Check if 'key' is an existing property in selectedDimensions
     if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
-      this.selectedDimensions[key] = value;
+      this.selectedDimensions[key as keyof Dimensions] = value;
     }
     // else ignore or handle differently
   }  
