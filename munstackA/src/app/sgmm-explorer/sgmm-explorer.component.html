@@ -1,9 +1,14 @@
 <div class="bg-gray-100 min-h-screen p-6 flex flex-col items-center">
   <div class="max-w-6xl w-full">
+
+    <!-- DEBUG Display step -->
+    <div class="bg-white p-4 rounded-lg shadow-md mb-6">
+      <h2 class="font-bold text-lg">Step: {{ step }}</h2>
+    </div>
     
-    <!-- Show only sidebar at the start -->
+    <!-- Show only sidebar at the start (step < 4) -->
     <app-explorer-sidebar
-      *ngIf="step() < 4"
+      *ngIf="step < 4"
       [levels]="levels"
       [currentLevel]="currentLevel"
       [selectedDimensions]="selectedDimensions"
@@ -13,8 +18,8 @@
       (completeSetup)="completeSetup()"
     ></app-explorer-sidebar>
 
-    <!-- Show full explorer once setup is complete -->
-    <div *ngIf="step() === 4">
+    <!-- Show full explorer once setup is complete (step = 4) -->
+    <div *ngIf="step === 4">
       
       <!-- Header -->
       <app-explorer-header
@@ -24,11 +29,10 @@
         (zoomOut)="zoomOut()"
       ></app-explorer-header>
 
-      <!-- Centering Content Below Header -->
+      <!-- Main Content Below Header -->
       <div class="flex justify-center w-full mt-6">
         <div class="grid grid-cols-3 max-w-4xl w-full gap-6">
-          
-          <!-- Main Content -->
+          <!-- Expand or rearrange columns as needed -->
           <div class="col-span-3">
             <app-sgmm-level-views
               [currentLevel]="currentLevel"
@@ -36,7 +40,6 @@
               (zoomIn)="zoomIn()"
             ></app-sgmm-level-views>
 
-            <!-- Insights & Recommendations -->
             <app-explorer-insights
               [selectedDimensions]="selectedDimensions"
               [currentLevel]="currentLevel"

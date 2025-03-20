@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Dimensions } from '../sgmm-explorer/sgmm-explorer.component';
 import { IonicModule } from '@ionic/angular';
+import { Dimensions } from '../shared-state.service';
 
 @Component({
   standalone: true,

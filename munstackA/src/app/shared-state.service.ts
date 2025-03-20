@@ -1,7 +1,14 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { Dimensions } from './sgmm-explorer/sgmm-explorer.component';
+import { BehaviorSubject } from 'rxjs';
+
+export interface Dimensions {
+  persona: string;
+  market: string;
+  maturity: string;
+  size: string;
+  technology: string;
+}
+
 
 interface InputData {
   persona: string;
@@ -33,7 +40,7 @@ interface OutputData {
   }>;
 }
 
-// Hardcoded example data for illustration
+// Example default data
 const DEFAULT_OUTPUT_DATA: OutputData = {
   overview: {
     model: "St. Gallen Management Model",
@@ -79,70 +86,39 @@ const DEFAULT_OUTPUT_DATA: OutputData = {
   providedIn: 'root',
 })
 export class SharedStateService {
-  zoomIn(levels: any) {
-    throw new Error('Method not implemented.');
-  }
-  zoomOut() {
-    throw new Error('Method not implemented.');
-  }
-  // BehaviorSubjects hold the latest value and emit updates
-  private inputObjectSubject = new BehaviorSubject<InputData | null>(null);
-  private outputObjectSubject = new BehaviorSubject<OutputData>(DEFAULT_OUTPUT_DATA); // Set default
 
-  // Expose asObservable() so consumers cannot modify the subject directly
+  // BehaviorSubjects for input/output data
+  private inputObjectSubject = new BehaviorSubject<InputData | null>(null);
+  private outputObjectSubject = new BehaviorSubject<OutputData>(DEFAULT_OUTPUT_DATA);
+
+  // Observables for external subscription
   inputObject$ = this.inputObjectSubject.asObservable();
   outputObject$ = this.outputObjectSubject.asObservable();
+
+  // Manage current level (e.g., 0, 1, 2...)
   private currentLevelSubject = new BehaviorSubject<number>(0);
   currentLevel$ = this.currentLevelSubject.asObservable();
 
-  setLevel(newLevel: number) {
-    this.currentLevelSubject.next(newLevel);
-  }
+    /**
+   * Selected Dimensions (persona, market, etc.).
+   */
+    private dimensionsSubject = new BehaviorSubject<Dimensions>({
+      persona: 'Executive',
+      market: 'Global',
+      maturity: 'Growth',
+      size: 'Medium',
+      technology: 'Digital Native',
+    });
+    dimensions$ = this.dimensionsSubject.asObservable();
 
-  getLevel(): number {
-    return this.currentLevelSubject.value;
-  }
+  levels!: string[];
 
-  // 1) Dimensions
-  private dimensionsSubject = new BehaviorSubject<Dimensions>({
-    persona: 'Executive',
-    market: 'Global',
-    maturity: 'Growth',
-    size: 'Medium',
-    technology: 'Digital Native',
-  });
-
-  dimensions$ = this.dimensionsSubject.asObservable();
-
-  // 2) Current Level
-  // Getter for synchronous access
-  getDimensions(): Dimensions {
-    return this.dimensionsSubject.value;
-  }
-
-  getCurrentLevel(): number {
-    return this.currentLevelSubject.value;
-  }
-
-  // Update dimension by key
-  updateDimension(key: keyof Dimensions, value: string) {
-    const dims = { ...this.dimensionsSubject.value };
-    dims[key] = value;
-    this.dimensionsSubject.next(dims);
-  }
-
-  // Update entire Dimensions object at once (optional)
-  setDimensions(newDims: Dimensions) {
-    this.dimensionsSubject.next(newDims);
-  }
-
-
-  
-
+  // ------------------------------------------------------
+  // Input/Output data
+  // ------------------------------------------------------
   setInputObject(data: InputData): void {
     this.inputObjectSubject.next(data);
   }
-
   getInputObject(): InputData | null {
     return this.inputObjectSubject.value;
   }
@@ -150,8 +126,68 @@ export class SharedStateService {
   setOutputObject(data: OutputData): void {
     this.outputObjectSubject.next(data);
   }
-
   getOutputObject(): OutputData {
     return this.outputObjectSubject.value;
+  }
+
+  // ------------------------------------------------------
+  // Dimensions
+  // ------------------------------------------------------
+  /**
+   * A simple array of level names (0..n).
+   * If you want more dynamic logic, you can expand this later.
+   */
+  private readonly levelsArray = [
+    '10,000 ft - SGMM Overview',
+    '5,000 ft - Environmental Spheres',
+    '2,500 ft - Stakeholders',
+    '1,000 ft - Interaction Issues',
+    '500 ft - Processes',
+    'Ground Level - Management Practice',
+  ];
+
+
+  // -----------------------------------------------------
+  // Levels
+  // -----------------------------------------------------
+  getLevels(): string[] {
+    return this.levelsArray;
+  }
+
+  getCurrentLevel(): number {
+    return this.currentLevelSubject.value;
+  }
+
+  setLevel(newLevel: number) {
+    this.currentLevelSubject.next(newLevel);
+  }
+
+  // -----------------------------------------------------
+  // Dimensions
+  // -----------------------------------------------------
+  getDimensions(): Dimensions {
+    return this.dimensionsSubject.value;
+  }
+
+  updateDimension(key: keyof Dimensions, value: string) {
+    const dims = { ...this.dimensionsSubject.value };
+    dims[key] = value;
+    this.dimensionsSubject.next(dims);
+  }
+
+  // Example: Zoom in if we have a "levels" array in the parent
+  zoomIn(levels: string[]) {
+    const curr = this.currentLevelSubject.value;
+    if (curr < levels.length - 1) {
+      this.currentLevelSubject.next(curr + 1);
+    }
+  }
+
+  // Example: Zoom out if current > 0
+  zoomOut() {
+    const curr = this.currentLevelSubject.value;
+    if (curr > 0) {
+      this.currentLevelSubject.next(curr - 1);
+    }
   }
 }
