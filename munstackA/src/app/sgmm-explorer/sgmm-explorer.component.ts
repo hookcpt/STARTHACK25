@@ -1,23 +1,16 @@
-import { Component, signal } from '@angular/core';
+// sgmm-explorer.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// Import components
-import { ExplorerInsightsComponent } from '../explorer-insights/explorer-insights.component';
-import { SgmmLevel0OverviewComponent } from '../sgmm-level-view/sgmm-level0-overview/sgmm-level0-overview.component';
-import { SgmmLevelViewsComponent } from '../sgmm-level-view/sgmm-level-view.component';
-import { ExplorerHeaderComponent } from '../explorer-header/explorer-header.component';
-import { ExplorerSidebarComponent } from '../explorer-sidebar/explorer-sidebar.component';
-import { SharedStateService } from '../shared-state.service';
 import { Subscription } from 'rxjs';
 
-export interface Dimensions {
-  persona: string;
-  market: string;
-  maturity: string;
-  size: string;
-  technology: string;
-}
+import { SharedStateService, Dimensions } from '../shared-state.service';
+
+// Child components
+import { ExplorerInsightsComponent } from '../explorer-insights/explorer-insights.component';
+import { ExplorerHeaderComponent } from '../explorer-header/explorer-header.component';
+import { ExplorerSidebarComponent } from '../explorer-sidebar/explorer-sidebar.component';
+import { SgmmLevelViewsComponent } from '../sgmm-level-view/sgmm-level-view.component';
 
 @Component({
   selector: 'app-sgmm-explorer',
@@ -29,73 +22,77 @@ export interface Dimensions {
     FormsModule,
     ExplorerInsightsComponent,
     SgmmLevelViewsComponent,
-    SgmmLevel0OverviewComponent,
     ExplorerHeaderComponent,
     ExplorerSidebarComponent
   ],
 })
-export class SgmmExplorerComponent {
+export class SgmmExplorerComponent implements OnInit, OnDestroy {
+  // Local copies for template binding
+  selectedDimensions!: Dimensions;
+  currentLevel = 0;
+
+  // Step-based wizard: step=1..3 for partial UI, step=4 to show full explorer
+  step = 1;
+
+  // Level names from the service
+  levels: string[] = [];
+
+  private subs: Subscription[] = [];
+
   constructor(private sharedState: SharedStateService) {}
 
-  // Store dimensions
-  selectedDimensions: Dimensions = {
-    persona: 'Executive',
-    market: 'Global',
-    maturity: 'Growth',
-    size: 'Medium',
-    technology: 'Digital Native',
-  };
+  ngOnInit(): void {
+    // Pull level names from the service
+    this.levels = this.sharedState.getLevels();
 
-  // Track current view step
-  step = signal<number>(1); // Start at step 1 with only sidebar
+    // Subscribe to dimension changes
+    const dimsSub = this.sharedState.dimensions$.subscribe(dims => {
+      this.selectedDimensions = dims;
+    });
+    this.subs.push(dimsSub);
 
-  // Track zoom level
-  currentLevel = signal<number>(0);
-  levels: any;
-  subs: Subscription[] = [];
+    // Subscribe to currentLevel changes
+    const levelSub = this.sharedState.currentLevel$.subscribe(l => {
+      this.currentLevel = l;
+    });
+    this.subs.push(levelSub);
 
+    // Initialize local copies
+    this.selectedDimensions = this.sharedState.getDimensions();
+    this.currentLevel = this.sharedState.getCurrentLevel();
+  }
 
   ngOnDestroy(): void {
-    // Clean up subscriptions
+    // Cleanup
     this.subs.forEach(sub => sub.unsubscribe());
   }
 
-  setLevel(index: number) {
-    this.currentLevel.set(index);
+  // Wizard step logic
+  nextStep() {
+    if (this.step < 3) {
+      this.step++;
+    }
   }
-  
+  completeSetup() {
+    // Once step=4, we show the main explorer UI
+    this.step = 4;
+  }
 
-  // Methods that now delegate to SharedStateService
-  zoomIn(): void {
+  // Delegate dimension changes to the service
+  updateDimension(key: string, value: string) {
+    this.sharedState.updateDimension(key as keyof Dimensions, value);
+  }
+
+  // Delegate level changes
+  setLevel(index: number) {
+    this.sharedState.setLevel(index);
+  }
+
+  zoomIn() {
     this.sharedState.zoomIn(this.levels);
   }
 
   zoomOut() {
-    if (this.currentLevel() > 0) {
-      this.currentLevel.update(level => level - 1);
-    }
-  }
-  
-
-  // Update selected dimension
-  updateDimension(key: string, value: string) {
-    // If selectedDimensions is typed as { [k: string]: string }
-    // we can safely do bracket notation:
-    
-    // 1) Check if 'key' is an existing property in selectedDimensions
-    if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
-      this.selectedDimensions[key as keyof Dimensions] = value;
-    }
-  }
-
-  nextStep() {
-    if (this.step() < 3) {
-      this.step.set(this.step() + 1);  
-    }
-  }
-
-  // Final step reached -> Show full explorer
-  completeSetup() {
-    this.step.set(4);  
+    this.sharedState.zoomOut();
   }
 }
