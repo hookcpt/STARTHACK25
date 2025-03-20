@@ -2,32 +2,77 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
-export interface FileDescriptor {
-  name: string;
-  files?: string[];
-  color?: string;
+interface InputData {
+  persona: string;
+  market: string;
+  maturityLevel: string;
+  enterpriseSize: string;
+  technologyAdoption: string;
+  knowledgeDomain: string;
+  descriptionOfDecision: string;
+  level: string;
+  strategiclevel: string;
+  sublevel: string;
 }
 
-export interface GroupDescriptor {
-  name: string;
-  files: any[];
-  color?: string;
-  metadata?: any;
+interface OutputData {
+  overview: {
+    model: string;
+    context: string;
+  };
+  managementChallenges: Array<{
+    name: string;
+    description: string;
+    strategy: string;
+  }>;
+  opportunityAreas: Array<{
+    name: string;
+    description: string;
+    action: string;
+  }>;
 }
 
-export interface PlotDescriptor {
-  type: string;
-  image: any;
-  statistics: any;
-  cached?: any;
+
+@Injectable({
+  providedIn: 'root',
+})
+export class SharedStateService {
+  // BehaviorSubjects hold the latest value and emit updates
+  private inputObjectSubject = new BehaviorSubject<InputData | null>(null);
+  private outputObjectSubject = new BehaviorSubject<OutputData | null>(null);
+
+  // Expose asObservable() so consumers cannot modify the subject directly
+  inputObject$ = this.inputObjectSubject.asObservable();
+  outputObject$ = this.outputObjectSubject.asObservable();
+
+  setInputObject(data: InputData): void {
+    this.inputObjectSubject.next(data);
+  }
+
+  getInputObject(): InputData | null {
+    return this.inputObjectSubject.value;
+  }
+
+  setOutputObject(data: OutputData): void {
+    this.outputObjectSubject.next(data);
+  }
+
+  getOutputObject(): OutputData | null {
+    return this.outputObjectSubject.value;
+  }
 }
 
+
+
+
+/* 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedStateService {
   // Core State Subjects
   private subjects = {
+    // persona, enterprise, technology, information (all input store as observable)
     activityColumn: new BehaviorSubject<string | null>(null),
     groupColumn: new BehaviorSubject<string | null>(null),
     selectedColumn: new BehaviorSubject<string | null>(null),
@@ -219,3 +264,6 @@ export class SharedStateService {
     Object.values(this.plotManagement).forEach(plot => plot.stack.next([]));
   }
 }
+
+
+*/
