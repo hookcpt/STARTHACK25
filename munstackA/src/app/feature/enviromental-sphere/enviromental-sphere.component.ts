@@ -114,6 +114,39 @@ export class EnviromentalSphereComponent  implements OnInit, OnDestroy {
       }
     });
   }
+  callTechData(): void {
+    // Create sample user data - replace with your actual data structure
+    const userData: UserData = {
+      industry: "Technology",
+      size: "Medium",
+      goal: "Growth",
+      additional_context: "Looking to expand into new markets",
+      persona: "CEO",
+      market: "Global",
+      technology_adoption: "High",
+      knowledge_domain: "Software",
+      decision_description: "Digital transformation initiative"
+    };
+
+    // Call the service method and subscribe to the result
+    this.enviromentalSphereService.techData(userData).subscribe({
+      next: (result) => {
+        console.log('OutputData generation successful', result);
+        this.animationState = 'goingDeeper';
+
+        // Wait for animation to complete before showing results
+        setTimeout(() => {
+          this.showResults = true;
+          this.animationState = 'visible';
+        }, 500);
+        // The subscription above will handle updating the UI
+      },
+      error: (err) => {
+        console.error('Error calling generateStrategy:', err);
+        // The error subscription above will handle displaying the error
+      }
+    });
+  }
 
   /**
    * Process the strategy data for display or further use

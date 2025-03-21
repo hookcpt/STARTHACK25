@@ -9,7 +9,7 @@ import {EconomyImpact} from "../model/economy-impact";
   providedIn: 'root'
 })
 export class EnviromentalSphereService {
-  private readonly apiUrl = "http://localhost:8000/enviroment_analisy-economy";
+  private readonly apiUrl = "http://localhost:8000/";
   private readonly strategyDataSubject = new BehaviorSubject<EconomyResponse | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);
@@ -34,7 +34,25 @@ export class EnviromentalSphereService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<EconomyResponse>(this.apiUrl, params, { headers })
+    return this.http.post<EconomyResponse>(this.apiUrl+"enviroment_analisy-economy", params, { headers })
+      .pipe(
+        tap(data => {
+          this.strategyDataSubject.next(data);
+          this.loadingSubject.next(false);
+        }),
+        catchError(this.handleError)
+      );
+  }
+
+  techData(params: UserData): Observable<EconomyResponse> {
+    this.loadingSubject.next(true);
+    this.errorSubject.next(null);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post<EconomyResponse>(this.apiUrl+"enviroment_analisy-tech", params, { headers })
       .pipe(
         tap(data => {
           this.strategyDataSubject.next(data);
