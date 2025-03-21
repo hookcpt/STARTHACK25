@@ -3,6 +3,7 @@ import { IonHeader, IonToolbar, IonTitle, IonContent } from '@ionic/angular/stan
 
 import {ExplorerInsightsComponent} from "../explorer-insights/explorer-insights.component";
 
+
 @Component({
   standalone:true,
   selector: 'app-tab1',

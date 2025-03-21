@@ -1,9 +1,10 @@
 import { CommonModule } from "@angular/common";
 import {Component, Input, OnInit} from "@angular/core";
-import { SharedStateService } from "../shared-state.service";
 import { IonicModule } from "@ionic/angular"
 import {ExploreInsightsService} from "./services/explore-insights.service";
 import {UserData} from "../core/model/user-data";
+import {Subscription} from "rxjs";
+import {ApiResponse} from "./model/output-data";
 
 @Component({
   standalone: true,
@@ -55,6 +56,11 @@ import {UserData} from "../core/model/user-data";
 
       </div>
     </div>
+
+    <!-- Loading Overlay -->
+    <div *ngIf="loading" class="loading-overlay">
+      <div class="loader">Loading...</div>
+    </div>
   `,
   imports: [CommonModule, IonicModule],
 })
@@ -66,7 +72,8 @@ export class ExplorerInsightsComponent implements OnInit{
   opportunityAreas: any[] = [];
   expandedChallenges: boolean[] = [];
   expandedOpportunities: boolean[] = [];
-
+   loading: boolean = true;
+  private readonly subscription = new Subscription();
   constructor(private sharedStateService: ExploreInsightsService) {}
 
   ngOnInit(): void {
@@ -81,14 +88,19 @@ export class ExplorerInsightsComponent implements OnInit{
       knowledge_domain: "Software",
       decision_description: "Digital transformation initiative"
     };
+    this.subscription.add(
+      this.sharedStateService.loading$.subscribe(loading => {
+        this.loading = loading;
+      })
+    );
 
-    this.sharedStateService.generateStrategy(userData).subscribe(outputData => {
-      if (outputData) {
-        console.log(outputData)
-        this.managementChallenges = outputData.managementChallenges;
-        this.opportunityAreas = outputData.opportunityAreas;
-        this.expandedChallenges = new Array(outputData.managementChallenges.length).fill(false);
-        this.expandedOpportunities = new Array(outputData.opportunityAreas.length).fill(false);
+    this.sharedStateService.generateStrategy(userData).subscribe(ApiResponse => {
+      if (ApiResponse.strategy) {
+        console.log(ApiResponse.strategy+"---"+ApiResponse.strategy.opportunityAreas);
+        this.managementChallenges = ApiResponse.strategy.managementChallenges;
+        this.opportunityAreas = ApiResponse.strategy.opportunityAreas;
+        this.expandedChallenges = new Array(ApiResponse.strategy.managementChallenges.length).fill(false);
+        this.expandedOpportunities = new Array(ApiResponse.strategy.opportunityAreas.length).fill(false);
       }
     });
   }

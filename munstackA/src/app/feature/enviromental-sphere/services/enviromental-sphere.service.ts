@@ -24,7 +24,7 @@ export class EnviromentalSphereService {
 
   /**
    * Generate strategy based on input parameters
-   * @param params Strategy generation parameters
+   * @param params OutputData generation parameters
    * @returns Observable of StrategyData
    */
   generateStrategy(params: UserData): Observable<EconomyData> {

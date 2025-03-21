@@ -98,7 +98,7 @@ export class EnviromentalSphereComponent  implements OnInit, OnDestroy {
     // Call the service method and subscribe to the result
     this.enviromentalSphereService.generateStrategy(userData).subscribe({
       next: (result) => {
-        console.log('Strategy generation successful', result);
+        console.log('OutputData generation successful', result);
         this.animationState = 'goingDeeper';
 
         // Wait for animation to complete before showing results

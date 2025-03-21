@@ -1,7 +1,7 @@
 <div *ngIf="strategyData" class="results">
   <button (click)="goBack()" class="back-button">← Back</button>
 
-  <h2>Strategy Analysis</h2>
+  <h2>OutputData Analysis</h2>
 
   <div class="overview">
     <h3>Overview</h3>
@@ -14,7 +14,7 @@
     <div *ngFor="let impact of impacts" class="impact-item">
       <h4>{{ impact!.name }}</h4>
       <p>{{ impact!.description }}</p>
-      <p><strong>Strategy:</strong> {{ impact.strategy }}</p>
+      <p><strong>OutputData:</strong> {{ impact.strategy }}</p>
     </div>
   </div>
 </div>

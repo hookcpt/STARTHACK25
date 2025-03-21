@@ -1,26 +1,11 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, catchError, Observable, tap, throwError} from "rxjs";
-import {EconomyData} from "../../feature/enviromental-sphere/model/economy-data";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
 import {UserData} from "../../core/model/user-data";
-import {EconomyImpact} from "../../feature/enviromental-sphere/model/economy-impact";
+import {ApiResponse, Strategy} from "../model/output-data";
 
-interface OutputData {
-  overview: {
-    model: string;
-    context: string;
-  };
-  managementChallenges: Array<{
-    name: string;
-    description: string;
-    strategy: string;
-  }>;
-  opportunityAreas: Array<{
-    name: string;
-    description: string;
-    action: string;
-  }>;
-}
+
+
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +13,7 @@ interface OutputData {
 export class ExploreInsightsService {
 
   private readonly apiUrl = "http://localhost:8000/overview";
-  private readonly insigthsDataSubject = new BehaviorSubject<OutputData | null>(null);
+  private readonly insigthsDataSubject = new BehaviorSubject<Strategy  | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);
 
@@ -41,10 +26,10 @@ export class ExploreInsightsService {
 
   /**
    * Generate strategy based on input parameters
-   * @param params Strategy generation parameters
+   * @param params OutputData generation parameters
    * @returns Observable of StrategyData
    */
-  generateStrategy(params: UserData): Observable<OutputData> {
+  generateStrategy(params: UserData): Observable<ApiResponse> {
     this.loadingSubject.next(true);
     this.errorSubject.next(null);
 
@@ -52,7 +37,7 @@ export class ExploreInsightsService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<OutputData>(this.apiUrl, params, { headers })
+    return this.http.post<any>(this.apiUrl, params, { headers })
       .pipe(
         tap(data => {
           this.insigthsDataSubject.next(data);
@@ -66,7 +51,7 @@ export class ExploreInsightsService {
    * Get the current strategy data
    * @returns The current strategy data or null if not loaded
    */
-  getCurrentStrategyData(): OutputData | null {
+  getCurrentStrategyData(): Strategy | null {
     return this.insigthsDataSubject.value;
   }
 
