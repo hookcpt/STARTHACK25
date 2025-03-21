@@ -1,0 +1,92 @@
+<!-- Level 5: Management Practice -->
+<div *ngIf="currentLevel === 5" class="bg-red-50 rounded-lg p-8 relative">
+  <div class="absolute right-2 top-2 text-sm text-gray-500">Ground Level</div>
+  <h3 class="text-xl font-bold mb-4 text-center">Management Practice</h3>
+
+  <div class="grid grid-cols-2 gap-6">
+    <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
+      <h4 class="font-bold text-center mb-2">Tailored Insights for:</h4>
+      <div class="flex flex-wrap justify-center gap-2">
+        <div class="bg-blue-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.persona }}</div>
+        <div class="bg-green-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.market }} Market</div>
+        <div class="bg-yellow-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.maturity }} Stage</div>
+        <div class="bg-purple-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.size }} Enterprise</div>
+        <div class="bg-red-100 px-3 py-1 rounded-full text-sm">{{ selectedDimensions.technology }}</div>
+      </div>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <h4 class="font-bold">Key Challenges</h4>
+      <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+        <li>Balancing stakeholder expectations in {{ selectedDimensions.market }} markets</li>
+        <li>Managing {{ selectedDimensions.maturity }} phase transitions</li>
+        <li>Implementing {{ selectedDimensions.technology }} solutions effectively</li>
+        <li>Scaling leadership for {{ selectedDimensions.size }} organization needs</li>
+      </ul>
+    </div>
+
+    <div class="bg-white p-4 rounded-lg shadow-md">
+      <h4 class="font-bold">Recommended Approaches</h4>
+      <ul class="list-disc pl-5 mt-2 text-sm space-y-1">
+        <li>Stakeholder mapping and prioritization frameworks</li>
+        <li>Strategic planning templates for {{ selectedDimensions.maturity }} companies</li>
+        <li>Communication strategies for {{ selectedDimensions.size }} enterprises</li>
+        <li>{{ selectedDimensions.technology }} implementation roadmaps</li>
+      </ul>
+    </div>
+
+    <div class="col-span-2 bg-white p-4 rounded-lg shadow-md">
+      <h4 class="font-bold mb-2">Practical Tools & Resources</h4>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="bg-gray-50 p-3 rounded-lg text-center">
+          <div class="font-medium">Decision Framework</div>
+          <div class="text-xs text-blue-600 mt-1">Download Template</div>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-lg text-center">
+          <div class="font-medium">Stakeholder Matrix</div>
+          <div class="text-xs text-blue-600 mt-1">Interactive Tool</div>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-lg text-center">
+          <div class="font-medium">Process Analyzer</div>
+          <div class="text-xs text-blue-600 mt-1">Launch Assessment</div>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-lg text-center">
+          <div class="font-medium">Strategy Canvas</div>
+          <div class="text-xs text-blue-600 mt-1">Collaborative Tool</div>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-lg text-center">
+          <div class="font-medium">Case Studies</div>
+          <div class="text-xs text-blue-600 mt-1">Browse Library</div>
+        </div>
+        <div class="bg-gray-50 p-3 rounded-lg text-center">
+          <div class="font-medium">Expert Network</div>
+          <div class="text-xs text-blue-600 mt-1">Connect</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<div class="mt-6 bg-white p-4 rounded-lg shadow-md">
+<h2 class="font-bold text-lg mb-3">Insights & Recommendations</h2>
+<p class="text-sm text-gray-600 mb-3">
+  Based on your selected dimensions and current view level, here are some tailored insights:
+</p>
+
+<div class="grid grid-cols-2 gap-4">
+  <div class="border rounded-lg p-3">
+    <h3 class="font-medium text-blue-700">Management Challenges</h3>
+    <p class="text-sm mt-1">
+      {{ selectedDimensions.maturity }} stage companies in {{ selectedDimensions.market }} markets typically
+      face coordination challenges across multiple stakeholder groups.
+    </p>
+  </div>
+
+  <div class="border rounded-lg p-3">
+    <h3 class="font-medium text-green-700">Opportunity Areas</h3>
+    <p class="text-sm mt-1">
+      {{ selectedDimensions.technology }} organizations can leverage process optimization
+      to enhance competitive advantage.
+    </p>
+  </div>
+</div>
+</div>
