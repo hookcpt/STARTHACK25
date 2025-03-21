@@ -144,8 +144,8 @@ export class ExplorerSidebarComponent {
   // Navigation items
   navigationItems = [
     { name: "10,000 ft - SGMM Overview", disabled: false },
-    { name: "5,000 ft - Environmental Spheres", disabled: false },
-    { name: "1,000 ft - Interaction Issues", disabled: false },
+    { name: "10,000 ft - Environmental Spheres", disabled: false },
+    { name: "5,000 ft - Interaction Issues", disabled: false },
     { name: "Ground Level - Management Practice", disabled: false }
   ];
   selectedNavItem: string | null = null;
