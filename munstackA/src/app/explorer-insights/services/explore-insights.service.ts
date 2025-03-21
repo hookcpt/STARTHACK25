@@ -27,7 +27,7 @@ interface OutputData {
 })
 export class ExploreInsightsService {
 
-  private readonly apiUrl = "http://localhost:8000/enviroment_analisy-economy";
+  private readonly apiUrl = "http://localhost:8000/overview";
   private readonly insigthsDataSubject = new BehaviorSubject<OutputData | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);

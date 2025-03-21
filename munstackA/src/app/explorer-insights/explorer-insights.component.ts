@@ -84,6 +84,7 @@ export class ExplorerInsightsComponent implements OnInit{
 
     this.sharedStateService.generateStrategy(userData).subscribe(outputData => {
       if (outputData) {
+        console.log(outputData)
         this.managementChallenges = outputData.managementChallenges;
         this.opportunityAreas = outputData.opportunityAreas;
         this.expandedChallenges = new Array(outputData.managementChallenges.length).fill(false);
