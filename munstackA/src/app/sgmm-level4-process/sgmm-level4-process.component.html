@@ -1,5 +1,5 @@
  <!-- Level 4: Processes -->
- <div *ngIf="currentLevel === 4" class="bg-orange-50 rounded-lg p-8 relative">
+ <div  class="bg-orange-50 rounded-lg p-8 relative">
   <div class="absolute right-2 top-2 text-sm text-gray-500">500 ft View</div>
   <h3 class="text-xl font-bold mb-4 text-center">Organizational Processes</h3>
 
@@ -7,7 +7,7 @@
     <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
       <h4 class="font-bold text-blue-700">Management Processes</h4>
       <div class="mt-2 text-sm">
-        <p>For {{ selectedDimensions.persona }} in {{ selectedDimensions.maturity }} companies:</p>
+        <p>For companies:</p>
         <div class="mt-2 space-y-2">
           <!-- for loop the . -->
           <div class="bg-blue-50 p-2 rounded">
@@ -24,7 +24,7 @@
     <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
       <h4 class="font-bold text-green-700">Business Processes</h4>
       <div class="mt-2 text-sm">
-        <p>For {{ selectedDimensions.size }} enterprises:</p>
+        <p>For enterprises:</p>
         <div class="mt-2 space-y-2">
           <div class="bg-green-50 p-2 rounded">Value creation processes</div>
           <div class="bg-green-50 p-2 rounded">Service delivery models</div>
@@ -36,7 +36,7 @@
     <div class="flex-1 bg-white p-4 rounded-lg shadow-md">
       <h4 class="font-bold text-purple-700">Support Processes</h4>
       <div class="mt-2 text-sm">
-        <p>For {{ selectedDimensions.technology }} organizations:</p>
+        <p>For  organizations:</p>
         <div class="mt-2 space-y-2">
           <div class="bg-purple-50 p-2 rounded">HR management systems</div>
           <div class="bg-purple-50 p-2 rounded">Financial controlling</div>
@@ -47,7 +47,7 @@
   </div>
 
   <div class="text-center">
-    <button class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded-lg shadow" (click)="zoomIn.emit()">
+    <button class="bg-orange-100 hover:bg-orange-200 px-4 py-2 rounded-lg shadow">
       Explore Implementation Details
     </button>
   </div>

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'app-sgmm-leve3-issues',
-  templateUrl: './sgmm-leve3-issues.component.html',
-  styleUrls: ['./sgmm-leve3-issues.component.scss'],
+  selector: 'app-sgmm-level3-issues',
+  templateUrl: './sgmm-level3-issues.component.html',
+  styleUrls: ['./sgmm-level3-issues.component.scss'],
+  standalone:true
 })
-export class SgmmLeve3IssuesComponent  implements OnInit {
+export class SgmmLevel3IssuesComponent  implements OnInit {
 
   constructor() { }
 

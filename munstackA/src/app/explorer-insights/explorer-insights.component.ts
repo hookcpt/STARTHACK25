@@ -1,7 +1,9 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import {Component, Input, OnInit} from "@angular/core";
 import { SharedStateService } from "../shared-state.service";
 import { IonicModule } from "@ionic/angular"
+import {ExploreInsightsService} from "./services/explore-insights.service";
+import {UserData} from "../core/model/user-data";
 
 @Component({
   standalone: true,
@@ -14,12 +16,12 @@ import { IonicModule } from "@ionic/angular"
       </p>
 
       <div class="grid md:grid-cols-2 gap-6">
-        
+
         <!-- Management Challenges -->
         <div class="border rounded-lg p-4 bg-blue-50 shadow-sm">
           <h3 class="font-semibold text-blue-700 text-lg mb-3">Management Challenges</h3>
           <ul class="space-y-3">
-            <li *ngFor="let challenge of managementChallenges; let i = index" 
+            <li *ngFor="let challenge of managementChallenges; let i = index"
                 class="p-3 bg-white rounded-md shadow hover:shadow-lg transition cursor-pointer">
               <div class="flex justify-between items-center" (click)="toggleChallenge(i)">
                 <h4 class="font-medium text-blue-600">{{ challenge.name }}</h4>
@@ -37,7 +39,7 @@ import { IonicModule } from "@ionic/angular"
         <div class="border rounded-lg p-4 bg-green-50 shadow-sm">
           <h3 class="font-semibold text-green-700 text-lg mb-3">Opportunity Areas</h3>
           <ul class="space-y-3">
-            <li *ngFor="let opportunity of opportunityAreas; let i = index" 
+            <li *ngFor="let opportunity of opportunityAreas; let i = index"
                 class="p-3 bg-white rounded-md shadow hover:shadow-lg transition cursor-pointer">
               <div class="flex justify-between items-center" (click)="toggleOpportunity(i)">
                 <h4 class="font-medium text-green-600">{{ opportunity.name }}</h4>
@@ -56,7 +58,7 @@ import { IonicModule } from "@ionic/angular"
   `,
   imports: [CommonModule, IonicModule],
 })
-export class ExplorerInsightsComponent {
+export class ExplorerInsightsComponent implements OnInit{
   @Input() selectedDimensions!: any;
   @Input() currentLevel!: number;
 
@@ -65,10 +67,22 @@ export class ExplorerInsightsComponent {
   expandedChallenges: boolean[] = [];
   expandedOpportunities: boolean[] = [];
 
-  constructor(private sharedStateService: SharedStateService) {}
+  constructor(private sharedStateService: ExploreInsightsService) {}
 
   ngOnInit(): void {
-    this.sharedStateService.outputObject$.subscribe(outputData => {
+    const userData: UserData = {
+      industry: "Technology",
+      size: "Medium",
+      goal: "Growth",
+      additional_context: "Looking to expand into new markets",
+      persona: "CEO",
+      market: "Global",
+      technology_adoption: "High",
+      knowledge_domain: "Software",
+      decision_description: "Digital transformation initiative"
+    };
+
+    this.sharedStateService.generateStrategy(userData).subscribe(outputData => {
       if (outputData) {
         this.managementChallenges = outputData.managementChallenges;
         this.opportunityAreas = outputData.opportunityAreas;

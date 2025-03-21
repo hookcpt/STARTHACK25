@@ -5,27 +5,27 @@
   <div class="grid grid-cols-3 gap-4">
     <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
       <h4 class="font-bold">Customers</h4>
-      <p class="text-xs">Specific to: {{ selectedDimensions.market }} markets</p>
+      <p class="text-xs">Specific to: {{ selectedDimensions!.market }} markets</p>
     </div>
     <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
       <h4 class="font-bold">Employees</h4>
-      <p class="text-xs">For: {{ selectedDimensions.size }} enterprises</p>
+      <p class="text-xs">For: {{ selectedDimensions!.size }} enterprises</p>
     </div>
     <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
       <h4 class="font-bold">Investors</h4>
-      <p class="text-xs">Relevant for: {{ selectedDimensions.maturity }} stage</p>
+      <p class="text-xs">Relevant for: {{ selectedDimensions!.maturity }} stage</p>
     </div>
     <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
       <h4 class="font-bold">Suppliers</h4>
-      <p class="text-xs">Integration: {{ selectedDimensions.technology }}</p>
+      <p class="text-xs">Integration: {{ selectedDimensions!.technology }}</p>
     </div>
     <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
       <h4 class="font-bold">Government</h4>
-      <p class="text-xs">Regulations in {{ selectedDimensions.market }} markets</p>
+      <p class="text-xs">Regulations in {{ selectedDimensions!.market }} markets</p>
     </div>
     <div class="bg-white p-4 rounded-lg shadow-md hover:bg-blue-50 cursor-pointer" (click)="zoomIn.emit()">
       <h4 class="font-bold">Media & Public</h4>
-      <p class="text-xs">For: {{ selectedDimensions.size }} organizations</p>
+      <p class="text-xs">For: {{ selectedDimensions!.size }} organizations</p>
     </div>
   </div>
   <div class="mt-6 text-sm">
