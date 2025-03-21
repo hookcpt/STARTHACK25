@@ -1,13 +1,15 @@
-import {EconomyImpact} from "./economy-impact";
 
-export interface EconomyData {
-  strategy: {
-    Overview: {
-      context: string;
-      challenge: string;
-    };
-    Impact: EconomyImpact[];
+export interface EconomyResponse {
+  strategy: EconomyStrategy;
+}
 
-    vector_store_id: string;
-  };
+export interface EconomyStrategy {
+  impact: Impact[];
+  vector_store_id: string;
+}
+
+export interface Impact {
+  name: string;
+  description: string;
+  strategy: string;
 }

@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {EconomyData} from "./model/economy-data";
 import {Subscription} from "rxjs";
 import {EnviromentalSphereService} from "./services/enviromental-sphere.service";
 import { UserData } from 'src/app/core/model/user-data';
@@ -7,6 +6,7 @@ import {CommonModule} from "@angular/common";
 import {EconomicComponent} from "./components/economic/economic.component";
 
 import {animate, state, style, transition, trigger} from "@angular/animations";
+import {EconomyResponse} from "./model/economy-data";
 
 @Component({
   imports: [
@@ -42,7 +42,7 @@ import {animate, state, style, transition, trigger} from "@angular/animations";
   ]
 })
 export class EnviromentalSphereComponent  implements OnInit, OnDestroy {
-  strategyData: EconomyData | null = null;
+  strategyData: EconomyResponse | null = null;
   loading = false;
   error: string | null = null;
   showResults = false;
@@ -119,13 +119,13 @@ export class EnviromentalSphereComponent  implements OnInit, OnDestroy {
    * Process the strategy data for display or further use
    * @param data The strategy data returned from the API
    */
-  private processStrategyData(data: EconomyData): void {
+  private processStrategyData(data: EconomyResponse): void {
     // Add any additional processing logic here
     console.log('Processing strategy data:', data.strategy);
 
     // Example: Extract specific data points or transform data
-    if (data.strategy && data.strategy.Impact) {
-      const impacts = data.strategy.Impact;
+    if (data.strategy && data.strategy.impact) {
+      const impacts = data.strategy.impact;
       console.log(`Found ${impacts?.length || 0} impact items`);
     }
   }

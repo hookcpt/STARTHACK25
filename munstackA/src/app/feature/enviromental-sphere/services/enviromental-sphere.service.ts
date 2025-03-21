@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, catchError, Observable, tap, throwError} from 'rxjs';
-import { environment } from 'src/environments/environment';
-import {EconomyData} from "../model/economy-data";
+import { EconomyResponse} from "../model/economy-data";
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
 import {UserData} from "../../../core/model/user-data";
 import {EconomyImpact} from "../model/economy-impact";
@@ -11,7 +10,7 @@ import {EconomyImpact} from "../model/economy-impact";
 })
 export class EnviromentalSphereService {
   private readonly apiUrl = "http://localhost:8000/enviroment_analisy-economy";
-  private readonly strategyDataSubject = new BehaviorSubject<EconomyData | null>(null);
+  private readonly strategyDataSubject = new BehaviorSubject<EconomyResponse | null>(null);
   private readonly loadingSubject = new BehaviorSubject<boolean>(false);
   private readonly errorSubject = new BehaviorSubject<string | null>(null);
 
@@ -27,7 +26,7 @@ export class EnviromentalSphereService {
    * @param params OutputData generation parameters
    * @returns Observable of StrategyData
    */
-  generateStrategy(params: UserData): Observable<EconomyData> {
+  generateStrategy(params: UserData): Observable<EconomyResponse> {
     this.loadingSubject.next(true);
     this.errorSubject.next(null);
 
@@ -35,7 +34,7 @@ export class EnviromentalSphereService {
       'Content-Type': 'application/json'
     });
 
-    return this.http.post<EconomyData>(this.apiUrl, params, { headers })
+    return this.http.post<EconomyResponse>(this.apiUrl, params, { headers })
       .pipe(
         tap(data => {
           this.strategyDataSubject.next(data);
@@ -49,24 +48,19 @@ export class EnviromentalSphereService {
    * Get the current strategy data
    * @returns The current strategy data or null if not loaded
    */
-  getCurrentStrategyData(): EconomyData | null {
+  getCurrentStrategyData(): EconomyResponse | null {
     return this.strategyDataSubject.value;
   }
 
   /**
-   * Get the strategy overview
-   * @returns Overview object or null if data not loaded
-   */
-  getOverview(): { context: string; challenge: string } | null {
-    return this.strategyDataSubject.value?.strategy.Overview || null;
-  }
+
 
   /**
    * Get the impact items from the current strategy data
    * @returns Array of impact items or empty array if data not loaded
    */
   getImpactItems(): EconomyImpact[] {
-    return this.strategyDataSubject.value?.strategy.Impact || [];
+    return this.strategyDataSubject.value?.strategy.impact || [];
   }
 
   /**
