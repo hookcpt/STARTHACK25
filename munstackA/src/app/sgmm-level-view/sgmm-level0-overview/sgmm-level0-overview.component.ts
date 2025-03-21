@@ -20,29 +20,31 @@ import { SharedStateService } from 'src/app/shared-state.service';
               <div class="w-24 h-24 bg-red-200 rounded-full flex items-center justify-center text-sm font-bold">
                 Management
               </div>
-              <div class="absolute text-sm font-bold text-green-700 -top-2">Environment</div>
-              <div class="absolute text-sm font-bold text-orange-700 -bottom-2">Organization</div>
             </div>
           </div>
 
           <!-- Interactive hotspots -->
           <div 
             class="absolute left-40 top-8 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
+            (click)="zoomIn.emit()"
           >
             Environmental Spheres
           </div>
           <div 
             class="absolute right-40 top-24 cursor-pointer bg-green-100 p-2 rounded-lg shadow hover:bg-green-200"
+            (click)="zoomIn.emit()"
           >
             Stakeholders
           </div>
           <div 
             class="absolute left-36 bottom-24 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200"
+            (click)="zoomIn.emit()"
           >
             Processes
           </div>
           <div 
             class="absolute right-36 bottom-16 cursor-pointer bg-orange-100 p-2 rounded-lg shadow hover:bg-orange-200"
+            (click)="zoomIn.emit()"
           >
             Development Modes
           </div>
@@ -57,16 +59,9 @@ import { SharedStateService } from 'src/app/shared-state.service';
   imports: [CommonModule],
 })
 export class SgmmLevel0OverviewComponent implements OnInit {
-  currentLevel = 0; // local property if you need to display or use it
 
-  constructor(private sharedState: SharedStateService) {}
+  constructor() {}
 
-  ngOnInit(): void {
-    // Observe the shared "currentLevel" in real time
-    this.sharedState.currentLevel$.subscribe(level => {
-      this.currentLevel = level;
-      console.log('Level changed to:', level);
-      // or do any other logic you need here
-    });
-  }
+  ngOnInit(): void {}
+  @Output() zoomIn = new EventEmitter<void>();
 }
