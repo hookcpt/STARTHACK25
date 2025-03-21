@@ -1,0 +1,20 @@
+<div *ngIf="strategyData" class="results">
+  <button (click)="goBack()" class="back-button">← Back</button>
+
+  <h2>Strategy Analysis</h2>
+
+  <div class="overview">
+    <h3>Overview</h3>
+    <p><strong>Context:</strong> {{ strategyData!.strategy.Overview.context }}</p>
+    <p><strong>Challenge:</strong> {{ strategyData!.strategy.Overview.challenge }}</p>
+  </div>
+
+  <div class="impacts">
+    <h3>Environmental Impacts</h3>
+    <div *ngFor="let impact of impacts" class="impact-item">
+      <h4>{{ impact!.name }}</h4>
+      <p>{{ impact!.description }}</p>
+      <p><strong>Strategy:</strong> {{ impact.strategy }}</p>
+    </div>
+  </div>
+</div>

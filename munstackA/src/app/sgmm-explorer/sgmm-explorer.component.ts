@@ -1,69 +1,110 @@
+// sgmm-explorer.component.ts
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
-interface SelectedDimensions {
-  persona: string;
-  market: string;
-  maturity: string;
-  size: string;
-  technology: string;
-}
+import { SharedStateService, Dimensions } from '../shared-state.service';
+
+// Child components
+import { ExplorerInsightsComponent } from '../explorer-insights/explorer-insights.component';
+import { ExplorerHeaderComponent } from '../explorer-header/explorer-header.component';
+import { ExplorerSidebarComponent } from '../explorer-sidebar/explorer-sidebar.component';
+import { SgmmLevelViewsComponent } from '../sgmm-level-view/sgmm-level-view.component';
 
 @Component({
   selector: 'app-sgmm-explorer',
   templateUrl: './sgmm-explorer.component.html',
   styleUrls: ['./sgmm-explorer.component.scss'],
+  standalone: true,
   imports: [
     CommonModule,
     FormsModule,
-    // any other modules/components you need
+    ExplorerInsightsComponent,
+    SgmmLevelViewsComponent,
+    ExplorerHeaderComponent,
+    ExplorerSidebarComponent
   ],
 })
-export class SGMMExplorerComponent implements OnInit {
+export class SgmmExplorerComponent implements OnInit, OnDestroy {
+  // Local copies for template binding
+  selectedDimensions!: Dimensions;
   currentLevel = 0;
-  selectedDimensions: SelectedDimensions = {
-    persona: 'Executive',
-    market: 'Global',
-    maturity: 'Growth',
-    size: 'Medium',
-    technology: 'Digital Native'
-  };
-  
-  levels = [
-    "10,000 ft - SGMM Overview", 
-    "5,000 ft - Environmental Spheres", 
-    "2,500 ft - Stakeholders",
-    "1,000 ft - Interaction Issues",
-    "500 ft - Processes",
-    "Ground Level - Management Practice"
-  ];
 
-  constructor() { }
+  // Step-based wizard: step=1..3 for partial UI, step=4 to show full explorer
+  step = 1;
+
+  // Level names from the service
+  levels: string[] = [];
+
+  private subs: Subscription[] = [];
+
+  constructor(private sharedState: SharedStateService) {}
 
   ngOnInit(): void {
+    // Pull level names from the service
+    this.levels = this.sharedState.getLevels();
+
+    // Subscribe to dimension changes
+    const dimsSub = this.sharedState.dimensions$.subscribe(dims => {
+      this.selectedDimensions = dims;
+    });
+    this.subs.push(dimsSub);
+
+    // Subscribe to currentLevel from SharedStateService
+    const levelSub = this.sharedState.currentLevel$.subscribe(level => {
+      this.currentLevel = level;
+    });
+    this.subs.push(levelSub);
+
+    // Initialize local copies
+    this.selectedDimensions = this.sharedState.getDimensions();
+    this.currentLevel = this.sharedState.getCurrentLevel();
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup
+    this.subs.forEach(sub => sub.unsubscribe());
+  }
+
+  // Delegate level updates to SharedStateService
+  setLevel(index: number): void {
+    this.sharedState.setLevel(index);
   }
 
   zoomIn(): void {
-    if (this.currentLevel < this.levels.length - 1) {
-      this.currentLevel++;
+    this.sharedState.zoomIn(this.levels);
+  }
+
+  zoomOut() {
+    this.sharedState.zoomOut();
+  }
+
+  /*
+  // Update selected dimension
+  updateDimension(key: string, value: string) {
+    if (Object.prototype.hasOwnProperty.call(this.selectedDimensions, key)) {
+      this.selectedDimensions[key as keyof Dimensions] = value;
     }
   }
-  
-  zoomOut(): void {
-    if (this.currentLevel > 0) {
-      this.currentLevel--;
+    */
+
+  nextStep() {
+    if (this.step < 3) {
+      this.step += 1;
     }
   }
 
-  setLevel(index: number): void {
-    this.currentLevel = index;
+  // Final step reached -> Show full explorer
+  completeSetup() {
+    // Once step=4, we show the main explorer UI
+    this.step = 4;
   }
 
-  updateDimension(dimension: string, value: string): void {
-    this.selectedDimensions = {
-      ...this.selectedDimensions,
-      [dimension]: value
-    };
+  // Delegate dimension changes to the service
+  updateDimension(key: string, value: string) {
+    this.sharedState.updateDimension(key as keyof Dimensions, value);
   }
+
 }
+
